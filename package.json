@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoaquinNicolasMonteroEsteves/Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoaquinNicolasMonteroEsteves/Backend/issues"
+  },
+  "homepage": "https://github.com/JoaquinNicolasMonteroEsteves/Backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
