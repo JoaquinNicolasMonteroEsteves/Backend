@@ -88,5 +88,14 @@
         "code": "abc000",
         "stock": 28,
         "id": 9
+    },
+    {
+        "title": "Producto 11",
+        "description": "Este es un producto prueba",
+        "price": 200,
+        "thumbnail": "Sin imagen",
+        "code": "abc0011",
+        "stock": 25,
+        "id": 10
     }
 ]
