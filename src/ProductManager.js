@@ -35,8 +35,6 @@ class ProductManager {
         try
         {
             await this.checkDirOrPath()
-            
-            // console.log(this.#products)
             return this.#products
         }
         catch (error)
@@ -56,7 +54,6 @@ class ProductManager {
                 if (title != "" && description != "" && price != 0 && thumbnail != "" && code != "" && stock != 0) {
                     this.#products.length > 0 ? this.#id = this.#products.reduce((acc, curr) => curr.id > acc ? curr.id : acc, 0)+1 : this.#id = 0 
                     const newProduct = {title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock, id: this.#id} //lastID ? lastID++ : 0
-                    // this.#id++
                     this.#products = [...this.#products, newProduct]
                 }
                 else {
@@ -80,13 +77,8 @@ class ProductManager {
         try
         {
             await this.checkDirOrPath()
-
             const foundProduct = this.#products.find((product) => product.id == id)??null
-            // if (foundProduct) {
-                // console.log("Found product: ")
-                // console.log(foundProduct)
-                return foundProduct
-            // } else {console.error("Product not found")}
+            return foundProduct
         }
         catch (error)
         {
