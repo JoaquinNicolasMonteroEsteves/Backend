@@ -1,6 +1,5 @@
 import fs from 'fs'
 
-
 class ProductManager {
     #products;
     #dirPath;
@@ -9,7 +8,7 @@ class ProductManager {
     constructor() {
         this.#products = new Array();
         this.#id = 0;
-        this.#dirPath = "../files";
+        this.#dirPath = "./files";
         this.#path = this.#dirPath + "/Products.json";
     }
 
@@ -43,29 +42,39 @@ class ProductManager {
         }
     }
 
-    addProduct = async (title, description, price, thumbnail, code, stock) => {
+    checkProperties = async (pro) => {
+        if (!pro.title || !pro.description || !pro.price || !pro.thumbnail || !pro.code || !pro.stock || !pro.status || !pro.category) {
+            return false
+        }
+        return true
+        
+    }
+
+    addProduct = async (pdt) => {
         try
         {
             await this.checkDirOrPath()
 
-            const checkCode = this.#products.find((product) => product.code == code)??0 //Operador nullish
+            const checkCode = this.#products.find((product) => product.code == pdt.code)??0 //Operador nullish
             if (!checkCode) {
                 
-                if (title != "" && description != "" && price != 0 && thumbnail != "" && code != "" && stock != 0) {
+                if (this.checkProperties(pdt)) {
                     this.#products.length > 0 ? this.#id = this.#products.reduce((acc, curr) => curr.id > acc ? curr.id : acc, 0)+1 : this.#id = 0 
-                    const newProduct = {title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock, id: this.#id} //lastID ? lastID++ : 0
+                    const newProduct = {title: pdt.title, description: pdt.description, price: pdt.price, thumbnail: pdt.thumbnail, code: pdt.code, stock: pdt.stock, status: pdt.status, category: pdt.category, id: this.#id}
                     this.#products = [...this.#products, newProduct]
+                    await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
+                    return newProduct
                 }
                 else {
-                    console.log("It is mandatory to complete all the fields.")
+                    return "It is mandatory to complete all the fields."
                 }
                 
             }
             else {
-                console.error("Code already in use. Please change it for a new one")
+                return "Code already in use. Please change it for a new one"
             }
             
-            await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
+            
         }
         catch (error)
         {
@@ -86,19 +95,28 @@ class ProductManager {
         }
     }
 
-    updateProduct = async (id, property, newValue) => {
+    updateProduct = async (id, properties, newValues) => {
         try
         {
             await this.checkDirOrPath()
     
             const foundProduct = this.#products.find((product) => product.id == id)??null
-            if (foundProduct) {
-                foundProduct[property] = newValue
-                console.log(foundProduct)
+            if (foundProduct){
+                let contains = true
+                properties.forEach(x => {
+                    let a = Object.keys(foundProduct).includes(x)
+                    if(!a)
+                    {contains = false}
+                })
+                if (!contains){return "Check for correct entries of properties keys or names."}
+                properties.forEach(p => {
+                    foundProduct[p] = newValues[properties.indexOf(p)]    
+                })
                 await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
+                return foundProduct
             }
             else {
-                console.log(`Product with id = ${id} was not found.`)
+                return `There is not an existing product with the ID ${id}.`
             }
         }
         catch (error)
