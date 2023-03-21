@@ -1,6 +1,7 @@
 import express from 'express'
 // import ProductManager from './ProductManager.js'
 import routerP from './Routes/products.router.js'
+import routerC from './Routes/carts.router.js'
 
 const app = express()
 const PORT = 8080
@@ -10,6 +11,7 @@ app.listen(PORT, () => {console.log(`Connecting on port ${PORT}`)})
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/api/products', routerP)
+app.use('/api/carts', routerC)
 // app.get('/api/products', async (req, res) => {
 //     let limit = parseInt(req.query.limit)??null
 //     let productManager = new ProductManager()

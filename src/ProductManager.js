@@ -65,10 +65,7 @@ class ProductManager {
                     await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
                     return newProduct
                 }
-                else {
-                    return "It is mandatory to complete all the fields."
-                }
-                
+                return "It is mandatory to complete all the fields."
             }
             else {
                 return "Code already in use. Please change it for a new one"
@@ -87,7 +84,10 @@ class ProductManager {
         {
             await this.checkDirOrPath()
             const foundProduct = this.#products.find((product) => product.id == id)??null
-            return foundProduct
+            if (foundProduct){
+                return foundProduct
+            }
+            return `There is not an existing product with the ID ${id}`
         }
         catch (error)
         {
@@ -115,9 +115,7 @@ class ProductManager {
                 await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
                 return foundProduct
             }
-            else {
-                return `There is not an existing product with the ID ${id}.`
-            }
+            return `There is not an existing product with the ID ${id}.`
         }
         catch (error)
         {
@@ -133,13 +131,10 @@ class ProductManager {
             const foundProduct = this.#products.find((product) => product.id == id)??null
             if(foundProduct) {
                 this.#products.splice(foundProduct.id, 1)
+                await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
+                return foundProduct
             }
-            else
-            {
-                console.log("The given id does not correspond to an existing product.")
-            }
-            
-            await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))    
+            return "The given id does not correspond to an existing product."
         }
         catch(error)
         {
