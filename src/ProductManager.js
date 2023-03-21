@@ -130,7 +130,7 @@ class ProductManager {
     
             const foundProduct = this.#products.find((product) => product.id == id)??null
             if(foundProduct) {
-                this.#products.splice(foundProduct.id, 1)
+                this.#products.splice(this.#products.indexOf(foundProduct), 1)
                 await fs.promises.writeFile(this.#path, JSON.stringify(this.#products))
                 return foundProduct
             }
