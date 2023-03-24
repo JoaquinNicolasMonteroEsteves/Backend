@@ -105,10 +105,11 @@ class ProductManager {
                 let contains = true
                 properties.forEach(x => {
                     let a = Object.keys(foundProduct).includes(x)
-                    if(!a)
-                    {contains = false}
+                    if(x == "id" || !a )
+                    {contains = false
+                    return}
                 })
-                if (!contains){return "Check for correct entries of properties keys or names."}
+                if (!contains){return "Check for correct entries of properties keys or names. Remember that ID can not be modified."}
                 properties.forEach(p => {
                     foundProduct[p] = newValues[properties.indexOf(p)]    
                 })

@@ -1,0 +1,13 @@
+<div>
+    <h1>Products list using Handlebars</h1>
+
+    {{#each products}}
+        <div>
+            <p><b>ID:</b> {{this.id}} / <b>Product name:</b> {{this.title}}</p>
+            <ul>
+                <li>{{this.description}}</li>
+                <li>{{this.stock}}</li>
+            </ul>
+        </div>
+    {{/each}}
+</div>

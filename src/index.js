@@ -1,36 +1,40 @@
 import express from 'express'
-// import ProductManager from './ProductManager.js'
 import routerP from './Routes/products.router.js'
 import routerC from './Routes/carts.router.js'
+import __dirname from './utils.js'
+import handlebars from 'express-handlebars'
+import viewRouter from './Routes/views.router.js'
+import { Server } from 'socket.io'
 
 const app = express()
 const PORT = 8080
 
-app.listen(PORT, () => {console.log(`Connecting on port ${PORT}`)})
-
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+
+app.engine('handlebars', handlebars.engine())
+app.set('views', __dirname + "/views/")
+app.set('view engine', 'handlebars')
+
+app.use(express.static(__dirname+'/public'))
+
+const httpServer = app.listen(PORT, () => {
+	console.log("Servidor escuchando por el puerto: " + PORT);
+})
+
+app.use('/', viewRouter)
+
+
+
+const socketServer = new Server(httpServer)
+socketServer.on('connection', socket => {
+    console.log("cliente conectado")
+
+})
+
 app.use('/api/products', routerP)
 app.use('/api/carts', routerC)
-// app.get('/api/products', async (req, res) => {
-//     let limit = parseInt(req.query.limit)??null
-//     let productManager = new ProductManager()
-//     let result = await productManager.getProducts()
-//     if(limit) {                                 
-//         let newArray = result.slice(0, limit)
-//         res.send(newArray)
-//     } else {
-//         res.send(result)
-//     }
-// })
 
-// app.get('/api/products/:pid', async (req, res) => {
-//     let productManager = new ProductManager()
-//     let result = await productManager.getProductById(parseInt(req.params.pid))
-//     if (result) {
-//         res.send(result)
-//     } 
-//     else {
-//         res.send({status: "Error", message: "Current ID does not match with any product"})
-//     }
-// })
+
+
+
