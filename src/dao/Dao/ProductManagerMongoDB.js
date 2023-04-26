@@ -22,7 +22,7 @@ class ProductManagerMDB {
             return result
         }
         catch (error) { 
-            throw Error (`Error getting products from database. Detail: ${error}`)
+            return (`Error getting products from database. Detail: ${error}`)
         }
     }
 
@@ -34,7 +34,7 @@ class ProductManagerMDB {
         }
         catch (error)
         {
-            throw Error(`Error adding a new product, check your connection. Detail: ${error}`)
+            return (`Error adding a new product, check your connection. Detail: ${error}`)
         }
     }
 

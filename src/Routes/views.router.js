@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import ProductManager from '../dao/Dao/ProductManagerFS.js'
+import ProductManagerMDB from '../dao/Dao/ProductManagerMongoDB.js'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import { readLinkFilter } from '../utils.js'
+import CartManagerDB from '../dao/Dao/CartManagerMongoDB.js'
 
 const viewRouter = Router()
 
@@ -80,9 +83,24 @@ const viewRouter = Router()
 viewRouter.get('/', async (req, res) =>{
     let productManager = new ProductManager()
     let products = await productManager.getProducts()
-    res.render('home', {
-        products
-    })
+    res.render('home', {products})
+})
+
+viewRouter.get('/carts/:cid', async (req, res) => {
+    let CM = new CartManagerDB()
+    let result = await CM.getCartById(req.params.cid)
+    res.render('cart', result)
+})
+
+viewRouter.get('/products', async (req, res) => {
+    let PM = new ProductManagerMDB()
+    let products = await PM.getProducts(req.query)
+    console.log(products);
+    let link_filter = readLinkFilter(req.query)
+    products.prevLink = products.hasPrevPage? `http://localhost:8080/api/products?${link_filter}page=${products.prevPage}`:'None'
+    products.nextLink = products.hasNextPage? `http://localhost:8080/api/products?${link_filter}page=${products.nextPage}`:'None'
+    products.status = products ? "success" : "error"
+    res.render('products', products)
 })
 
 viewRouter.get('/realtimeproducts', async (req, res) => {

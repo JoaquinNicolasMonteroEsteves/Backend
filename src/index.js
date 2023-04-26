@@ -1,7 +1,7 @@
 import express from 'express'
 import routerP from './Routes/products.router.js'
 import routerC from './Routes/carts.router.js'
-import __dirname from './utils.js'
+import { __dirname } from './utils.js'
 import handlebars from 'express-handlebars'
 import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
@@ -189,10 +189,7 @@ connectMongoDB()
 
 app.use(express.static(__dirname+'/public'))
 
-
-
 app.use('/', viewRouter)
-
 
 
 const socketServer = new Server(httpServer)

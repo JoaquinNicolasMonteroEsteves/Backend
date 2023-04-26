@@ -1,0 +1,30 @@
+<div>
+    <h1>Products from MongoDB:</h1>
+    <div>
+        {{#each docs}}
+            <div>
+                <p>- {{this.title}}</p>
+                <ul>
+                    <li>$ {{this.price}}</li>
+                    <li>{{this.description}}</li>
+                    <li>Stock: {{this.stock}}</li>
+                </ul>
+            </div>
+            <form method="POST" action='/api/carts/644857ef4d114bbc1bb0b615/products/{{this._id}}'>
+                <button type='submit'> + CART </button>
+            </form>
+        {{/each}}
+    </div>
+</div>
+<br/>
+<div>
+    {{#if hasPrevPage}}
+        <a href={{this.prevLink}}><< Anterior</a>
+    {{/if}}
+    &nbsp;
+    {{this.page}}
+    &nbsp;
+     {{#if hasNextPage}}
+        <a href={{this.nextLink}}>Siguiente >></a>
+    {{/if}} 
+</div>

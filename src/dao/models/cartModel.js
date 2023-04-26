@@ -23,12 +23,8 @@ const cartSchema = new mongoose.Schema({
     }
 })
 
-//  Array,
-        // ref: "products",
-        // required: true}
-
 cartSchema.pre('findOne', function() {
-    this.populate("products");
+    this.populate("products.product");
 });
 
 cartSchema.plugin(paginate)

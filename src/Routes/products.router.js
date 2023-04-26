@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../dao/Dao/ProductManagerFS.js";
 import ProductManagerMDB from "../dao/Dao/ProductManagerMongoDB.js";
+import { readLinkFilter } from "../utils.js";
 
 const routerP = Router();
 
@@ -17,7 +18,7 @@ routerP.get('/', async (req, res) => {
 
         res.send(products)
     } catch (error) {
-
+        return error
     }
 })
 
@@ -29,24 +30,10 @@ routerP.post('/', async (req, res) => {
         res.status(201).send(result)
     }
     catch (error){
-
+        return error
     }
 })
 
-const readLinkFilter = (filter) => {
-    let le_ble = ''
-    let bla_filter = filter
-    bla_filter.page ? delete bla_filter.page : {}
-    let bla_keys = Object.keys(bla_filter)
-    let bla_values = Object.values(bla_filter)
-    let bla_pairs = bla_keys.concat(bla_values)
-    if (bla_pairs != []) {
-        for (let i=0; i< (bla_pairs.length/2); i++){
-            let string = `${bla_pairs[i]}=${bla_pairs[i+bla_pairs.length/2]}&`
-            le_ble += string
-        }
-    }
-}
 
 
 

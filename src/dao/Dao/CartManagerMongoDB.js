@@ -6,9 +6,8 @@ class CartManagerDB {
     getCartById = async (cartId) => {
         try
         {
-            let cart = await cartModel.findOne({_id: cartId}).populate('products')
-            // console.log(cart.products);
-            return cart
+            let cart = await cartModel.findOne({_id: cartId}).populate("products")
+            return cart.toObject()
         }
         catch (error)
         {
@@ -21,9 +20,9 @@ class CartManagerDB {
     {
             let cart = await cartModel.findOne({_id: cartId})
             let product = await productModel.findOne({_id: productId})
-            let productInCart = cart.products.find(p => p._id == productId)??null
+            let productInCart = cart.products.find(p => p.product._id == productId)??null
             if(!productInCart) {
-                let newProduct = {_id: productId, quantity: 1}
+                let newProduct = {product: productId, quantity: 1}
                 cart.products.push(newProduct)                
                 await cartModel.findByIdAndUpdate({_id: cartId},cart)
                 return `Product "${product.title}" was successfully added to the cart (ID: ${cart.id})`
@@ -44,8 +43,8 @@ class CartManagerDB {
         try {
             let cart = await cartModel.findOne({_id: cartId})
             let product = await productModel.findOne({_id: productId})
-            let productInCart = cart.products.find(p => p._id == productId)??null
-            if(!productInCart) {
+            let productInCart = cart.products.find(p => p.product._id == productId)??null
+            if(!productInCart) {    
                 return `There is no product named "${product.title}" in the cart (ID: ${cart.id})`
             }
             else {
@@ -87,7 +86,7 @@ class CartManagerDB {
         {
             let cart = await cartModel.findOne({_id: cartId})
             let product = await productModel.findOne({_id: productId})
-            let productInCart = cart.products.find(p => p._id == productId)??null
+            let productInCart = cart.products.find(p => p.product._id == productId)??null
             if(productInCart) {
                 cart.products.splice(cart.products.indexOf(productInCart), 1)
                 await cartModel.findByIdAndUpdate({_id: cartId},cart)
