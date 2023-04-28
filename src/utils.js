@@ -1,5 +1,6 @@
 import {fileURLToPath} from 'url';
 import { dirname } from 'path';
+import bcrypt from 'bcrypt';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,7 +19,16 @@ const readLinkFilter = (filter) => {
             le_ble += string
         }
     }
+    return le_ble
 }
+
+// Generación del Hash
+export const create_hash = password => bcrypt.hashSync(password, bcrypt.genSaltSync)
+
+// Validad la contraseña
+export const is_valid_password = (user, password) => { // -> esta función se la llama en el login, en sessions.router.js
+    return bcrypt.compareSync(password, user.password)
+} 
 
 export {
     __dirname,
