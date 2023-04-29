@@ -1,7 +1,15 @@
 <div>
+    <div>
+        <h2>Bienvenid@ {{user.name}}!</h2>
+        <p>Age: {{user.age}} / Email: {{user.email}} / Role: {{user.role}} </p>
+    </div>
+    <form id="logoutForm">
+        <button type="submit">Logout</button>
+    </form>
+
     <h1>Products from MongoDB:</h1>
     <div>
-        {{#each docs}}
+        {{#each products.docs}}
             <div>
                 <p>- {{this.title}}</p>
                 <ul>
@@ -18,13 +26,15 @@
 </div>
 <br/>
 <div>
-    {{#if hasPrevPage}}
-        <a href={{this.prevLink}}><< Anterior</a>
+    {{#if products.hasPrevPage}}
+        <a href={{products.prevLink}}><< Page {{products.prevPage}}</a>
     {{/if}}
     &nbsp;
-    {{this.page}}
+    {{products.page}}
     &nbsp;
-     {{#if hasNextPage}}
-        <a href={{this.nextLink}}>Siguiente >></a>
+     {{#if products.hasNextPage}}
+        <a href={{products.nextLink}}>Page {{products.nextPage}} >></a>
     {{/if}} 
 </div>
+
+<script src="/js/logout.js"></script>

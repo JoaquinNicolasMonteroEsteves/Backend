@@ -23,7 +23,7 @@ const readLinkFilter = (filter) => {
 }
 
 // Generación del Hash
-export const create_hash = password => bcrypt.hashSync(password, bcrypt.genSaltSync)
+export const create_hash = password =>  bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
 // Validad la contraseña
 export const is_valid_password = (user, password) => { // -> esta función se la llama en el login, en sessions.router.js
