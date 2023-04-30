@@ -1,4 +1,5 @@
 <div>
+    {{#if user}}
     <div>
         <h2>Bienvenid@ {{user.name}}!</h2>
         <p>Age: {{user.age}} / Email: {{user.email}} / Role: {{user.role}} </p>
@@ -6,7 +7,7 @@
     <form id="logoutForm">
         <button type="submit">Logout</button>
     </form>
-
+    {{/if}}
     <h1>Products from MongoDB:</h1>
     <div>
         {{#each products.docs}}
@@ -25,6 +26,43 @@
     </div>
 </div>
 <br/>
+{{#if user.isAdmin}}
+    <div >
+        <h3>Add a new product to the store:</h3>
+        <form id="add-product-form">
+            <div>
+                Title:
+                <input id="title" />
+            </div>
+            <div>
+                Category:
+                <input id="category" />
+            </div>
+            <div>
+                Description:
+                <input id="description" />
+            </div>
+            <div>
+                Price:
+                <input id="price" type="number" />
+            </div>
+            <div>
+                Code:
+                <input id="code" type="number"/>
+            </div>
+            <div>
+                Stock:
+                <input id="stock" type="number"/>
+            </div>
+            <div>
+                Status:
+                <input id="status" type="boolean"/> 
+            </div>
+            <input type='submit' />
+        </form>
+    </div>
+{{/if}}
+</br>
 <div>
     {{#if products.hasPrevPage}}
         <a href={{products.prevLink}}><< Page {{products.prevPage}}</a>
@@ -38,3 +76,4 @@
 </div>
 
 <script src="/js/logout.js"></script>
+<script src="/js/form.js"></script>

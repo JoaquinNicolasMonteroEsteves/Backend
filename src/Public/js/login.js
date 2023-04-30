@@ -1,8 +1,8 @@
-const form = document.getElementById("loginForm")
+let login_form = document.getElementById("loginForm")
 
-form.addEventListener('submit', e => {
+login_form.addEventListener('submit', e => {
     e.preventDefault()
-    let data = new FormData (form)
+    let data = new FormData (login_form)
     let obj = {}
     data.forEach((value,key) => obj[key] = value)
     fetch('/api/sessions/login',  {

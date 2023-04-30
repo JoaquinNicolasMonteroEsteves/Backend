@@ -37,7 +37,8 @@ routerS.post("/login", async (req, res) => {
             name: `CoderHouse`,
             email: req.body.email,
             age: 9,
-            role: "admin"
+            role: "admin",
+            isAdmin: true
         }    
     } else {
         let user = await userModel.findOne({email})
@@ -48,7 +49,8 @@ routerS.post("/login", async (req, res) => {
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
-            role: "user"
+            role: "user",
+            isAdmin: false
         }
     }
     

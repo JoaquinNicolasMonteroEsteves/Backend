@@ -28,6 +28,7 @@ routerP.post('/', async (req, res) => {
         let PM = new ProductManagerMDB()
         let result = await PM.addProduct(req.body)
         res.status(201).send(result)
+        
     }
     catch (error){
         return error
