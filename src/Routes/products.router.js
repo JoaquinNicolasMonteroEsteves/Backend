@@ -26,7 +26,12 @@ routerP.post('/', async (req, res) => {
     try
     {
         let PM = new ProductManagerMDB()
+        // console.log(req.body);
         let result = await PM.addProduct(req.body)
+        console.log(result);
+        if(!result.status) {
+            res.status(405).send({status: 'Error', msg: "An error occurred while trying to add a new product"})
+        }
         res.status(201).send(result)
         
     }

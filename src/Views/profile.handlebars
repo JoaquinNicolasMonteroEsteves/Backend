@@ -1,6 +1,30 @@
-<div>
-    <h1>Tu perfil (sin datos sensibles)</h1>
-    <p>{{user.name}}</p>
-    <p>{{user.email}}</p>
-    <p>{{user.age}}</p>
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            {{#if user}}
+                <li id="li_logout"><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium;">Logout</a></button></form></li>
+            {{else}}
+                <li><a href="/users/login">Login</a></li>
+                <li><a href="/users/register">Register</a></li>
+            {{/if}}
+                <li><a href="/products">Products</a></li>
+        </ul>
+    </section>
+    {{#if user}}
+        <h1>Profile (whitout sensitive data)</h1>
+        <p>{{user.name}}</p>
+        <p>{{user.email}}</p>
+        <p>{{user.age}}</p>
+    {{else}}
+        <h1>There is no session detected</h1>
+    {{/if}}
 </div>
+
+<script src="/js/logout.js"></script>

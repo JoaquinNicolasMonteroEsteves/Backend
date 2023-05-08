@@ -1,79 +1,83 @@
-<div>
-    {{#if user}}
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            {{#if user}}
+                <li><a href="/users">Profile</a></li>
+                <li><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium;">Logout</a></button></form></li>
+            {{else}}
+                <li><a href="/users/login">Login</a></li>
+                <li><a href="/users/register">Register</a></li>
+            {{/if}}
+            
+        </ul>
+    </section>
     <div>
-        <h2>Bienvenid@ {{user.name}}!</h2>
-        <p>Age: {{user.age}} / Email: {{user.email}} / Role: {{user.role}} </p>
+        {{#if user}}
+        <div class="user_div">
+            <h2>Bienvenid@</h2>
+            <h2>{{user.name}}!</h2>
+            <p><b>Age:</b> {{user.age}} <b>Role:</b> {{user.role}}  </br> <b>Email:</b> {{user.email}}</p>
+        </div>
+        {{/if}}
+        <h1>Products from MongoDB:</h1>
+        <div class = "product_container">
+            {{#each products.docs}}
+                <div class = "product_div">
+                    <h2>{{this.title}}</h2>
+                    <ul>
+                        <li>$ {{this.price}}</li>
+                        <li>{{this.description}}</li>
+                        <li>Stock: {{this.stock}}</li>
+                    </ul>
+                    <form class = "form_btn_add" method="POST" action='/api/carts/644857ef4d114bbc1bb0b615/products/{{this._id}}'>
+                        <button class="btn" type='submit'> + CART </button>
+                    </form>
+                </div>
+            {{/each}}
+        </div>
     </div>
-    <form id="logoutForm">
-        <button type="submit">Logout</button>
-    </form>
-    {{/if}}
-    <h1>Products from MongoDB:</h1>
-    <div>
-        {{#each products.docs}}
-            <div>
-                <p>- {{this.title}}</p>
-                <ul>
-                    <li>$ {{this.price}}</li>
-                    <li>{{this.description}}</li>
-                    <li>Stock: {{this.stock}}</li>
-                </ul>
-            </div>
-            <form method="POST" action='/api/carts/644857ef4d114bbc1bb0b615/products/{{this._id}}'>
-                <button type='submit'> + CART </button>
+    <br/>
+    {{#if user.isAdmin}}
+        <div >
+            <h3>Add a new product to the store:</h3>
+            <form id="add-product-form">
+                    <label>Title:</label>
+                    <input name="title" /><br/>
+                    <label>Category:</label>
+                    <input name="category" /><br/>
+                    <label>Description:</label>
+                    <input name="description" /><br/>
+                    <label>Price:</label>
+                    <input name="price" type="number" /><br/>
+                    <label>Code:</label>
+                    <input name="code" type="number"/><br/>
+                    <label>Stock:</label>
+                    <input name="stock" type="number"/><br/>
+                    <label>Status:</label>
+                    <input name="status" type="boolean"/><br/>
+                <input type='submit' />
             </form>
-        {{/each}}
-    </div>
-</div>
-<br/>
-{{#if user.isAdmin}}
-    <div >
-        <h3>Add a new product to the store:</h3>
-        <form id="add-product-form">
-            <div>
-                Title:
-                <input id="title" />
-            </div>
-            <div>
-                Category:
-                <input id="category" />
-            </div>
-            <div>
-                Description:
-                <input id="description" />
-            </div>
-            <div>
-                Price:
-                <input id="price" type="number" />
-            </div>
-            <div>
-                Code:
-                <input id="code" type="number"/>
-            </div>
-            <div>
-                Stock:
-                <input id="stock" type="number"/>
-            </div>
-            <div>
-                Status:
-                <input id="status" type="boolean"/> 
-            </div>
-            <input type='submit' />
-        </form>
-    </div>
-{{/if}}
-</br>
-<div>
-    {{#if products.hasPrevPage}}
-        <a href={{products.prevLink}}><< Page {{products.prevPage}}</a>
+        </div>
     {{/if}}
-    &nbsp;
-    {{products.page}}
-    &nbsp;
-     {{#if products.hasNextPage}}
-        <a href={{products.nextLink}}>Page {{products.nextPage}} >></a>
-    {{/if}} 
-</div>
-
+    <div class="page_container">
+        {{#if products.hasPrevPage}}
+            <a href={{products.prevLink}}><< Page {{products.prevPage}}</a>
+        {{/if}}
+        &nbsp;
+        {{products.page}}
+        &nbsp;
+        {{#if products.hasNextPage}}
+            <a href={{products.nextLink}}>Page {{products.nextPage}} >></a>
+        {{/if}} 
+    </div>
+</div>    
 <script src="/js/logout.js"></script>
 <script src="/js/form.js"></script>
+<script src="/js/navbar.js"></script>

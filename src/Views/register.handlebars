@@ -1,24 +1,34 @@
-<div>
-    <h1>Registro</h1>
-    <form id="registerForm">
-
-        <label>Nombre</label>
-        <input name="first_name">
-        <br/>
-        <label>Apellido</label>
-        <input name="last_name">
-        <br/>
-        <label>Email</label>
-        <input name="email">
-        <br/>
-        <label>Edad</label>
-        <input name="age">
-        <br/>
-        <label>Contraseña</label>
-        <input name="password">
-
-        <input type="submit">
-    </form>
-    <p>¿Ya tienes una cuenta? <a href="/users/login">Ingresa aquí</a></p>
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            <li><a href="/users/login">Login</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </section>
+    <h1>Register</h1>
+    <div class="register_container">
+        <form id="registerForm">
+            <label>Name:</label>
+            <input class="input_form" name="first_name">
+            <label>Last name:</label>
+            <input class="input_form" name="last_name">
+            <label>Email:</label>
+            <input class="input_form" name="email">
+            <label>Age:</label>
+            <input class="input_form" name="age">
+            <label>Password:</label>
+            <input class="input_form" name="password">
+            <input value="Sign in" class="input_btn" type="submit">
+        </form>
+        </br>
+        <p>Already registered? <a href="/users/login">Login here</a></p>
+    </div>
 </div>
 <script src="/js/register.js"></script>

@@ -1,14 +1,30 @@
-<div>
-   <h1>Login</h1>
-   <form id="loginForm">
-       <label>Email</label>
-       <input name="email">
-       <br/>
-       <label>Contraseña</label>
-       <input name="password">
-       <input type="submit">
-   </form>
-   <p>¿No estás registrado? <a href="/users/register">Regístrate aquí</a></p>
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            <li><a href="/users/register">Register</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </section>
+    <h1>Login</h1>
+    <div class="login_container">
+        <form id="loginForm">
+            <label>Email:</label>
+            <input class="input_form" name="email">
+            <label>Password:</label>
+            <input class="input_form" name="password">
+            <input value="Log in" class="input_btn" type="submit" >
+        </form>
+        <br/>
+        <p>Don't have an account? <a href="/users/register">Sign up here</a></p>
+        <p>If you have a GitHub account <a href="/api/sessions/github">sign up with GitHub</a></p>
+    </div>
 </div>
 
 

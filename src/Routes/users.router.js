@@ -1,4 +1,5 @@
 import {Router} from 'express';
+// import { authJWToken } from '../utils.js';
 const routerU = Router();
 
 routerU.get('/login', (req, res)=>{
@@ -10,9 +11,21 @@ routerU.get('/register', (req, res)=>{
 })
 
 routerU.get('/', (req, res)=>{
-    res.render("profile", {
-        user: req.session.user
+    res.render('profile', {
+      user: req.session.user
     });
-})
+  })
+
+
+// routerU.get('/', authJWToken, (req, res)=>{
+//     res.render("profile", {
+//         // user: req.session.user
+//         user: req.user
+//     });
+// })
+
+// routerU.get('/error', (req, res) => {
+//     res.render("error")
+// })
 
 export default routerU;

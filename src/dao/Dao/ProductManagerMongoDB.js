@@ -29,11 +29,8 @@ class ProductManagerMDB {
     addProduct = async (pdt) => {
         try
         {
-            if (pdt) {
-                let new_product = await productModel.create(pdt)
-                return new_product
-            }
-            return `Error adding product: ${pdt}`
+            let new_product = await productModel.create(pdt)
+            return new_product
         }
         catch (error)
         {

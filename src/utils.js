@@ -22,6 +22,28 @@ const readLinkFilter = (filter) => {
     return le_ble
 }
 
+// //Implementando JWT
+// let private_key = "JoaquinNicolasMonteroEstevesKeyJWT"
+// export const generateJWToken = (user) => {
+//     return jwt.sign({user}, private_key, {expiresIn: '24h'})
+// }
+
+
+// export const authJWToken = (req, res, next) => {
+//     //Guardado en los headers de autorización
+//     let authHeader = req.headers.authotization
+//     if(!authHeader) {
+//         return res.status(401).send({error: 'User not authenticated or missing token.'})
+//     }
+//     let token = authHeader.split(' ')[1]
+//     //Validar token
+//     jwt.verify(token, private_key, (error, credentials) => {
+//         if (error) return res.status(403).send({error:"Invalid token, unauthorized."})
+//         req.user = credentials.user
+//         next()
+//     })
+// }
+
 // Generación del Hash
 export const create_hash = password =>  bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
