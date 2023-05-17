@@ -8,13 +8,12 @@ import { __dirname } from './utils.js'
 import handlebars from 'express-handlebars'
 import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
-import products from '../files/Products.json' assert { type: "json" }
 import session from 'express-session'
 import mongoose from 'mongoose'
 import productModel from './dao/models/product.model.js'
-
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const PORT = 8080
@@ -25,10 +24,20 @@ app.use(express.urlencoded({extended:true}))
 initializePassport()
 app.use(passport.initialize())
 app.use(passport,session())
+app.use(cookieParser('BackendJNME'))
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + "/views/")
 app.set('view engine', 'handlebars')
+
+let hbs = handlebars.create({})
+
+hbs.handlebars.registerHelper("isAdmin", function (role, options) {
+    if (role === "admin") {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
 
 app.use(session({
     secret: "JMS3cret",

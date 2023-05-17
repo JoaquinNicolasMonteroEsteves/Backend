@@ -3,7 +3,7 @@ import ProductManager from '../dao/Dao/ProductManagerFS.js'
 import ProductManagerMDB from '../dao/Dao/ProductManagerMongoDB.js'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import { readLinkFilter } from '../utils.js'
+import { authorization, passportCall, readLinkFilter } from '../utils.js'
 import CartManagerDB from '../dao/Dao/CartManagerMongoDB.js'
 
 const viewRouter = Router()
@@ -42,28 +42,29 @@ viewRouter.get('/session', (req, res) => {
     }
 })
 
-//Loggin
-viewRouter.get('/login', (req, res) => {
-    const {username, password} = req.query
+// //Loggin
+// viewRouter.get('/login', (req, res) => {
+//     const {username, password} = req.query
 
-    if (username !== 'pepe' || password !== 'pepepass') {
-        return res.status(401).send("Failed loggin or data entrance")
-    } else {
-        req.session.user = username
-        req.session.admin = true
-        res.send("Loggin successfull!")
-    }
-})
+//     if (username !== 'pepe' || password !== 'pepepass') {
+//         return res.status(401).send("Failed loggin or data entrance")
+//     } else {
+//         req.session.user = username
+//         req.session.admin = true
+//         res.send("Loggin successfull!")
+//     }
+// })
 
 //Loggin
 viewRouter.get('/logout', (req, res) => {
-    req.session.destroy(error => {
-        if (error) {
-            res.json({error: "Logout error", msg: "Failed on closing session"})
-        } else {
-            res.status(200).send()
-        }
-    })
+    res.clearCookie("jwtCookieToken").status(200).send()
+    // req.session.destroy(error => {
+    //     if (error) {
+    //         res.json({error: "Logout error", msg: "Failed on closing session"})
+    //     } else {
+    //         res.status(200).send()
+    //     }
+    // })
 })
 
 //Autenticación
@@ -92,7 +93,7 @@ viewRouter.get('/carts/:cid', async (req, res) => {
     res.render('cart', result)
 })
 
-viewRouter.get('/products', async (req, res) => {
+viewRouter.get('/products', passportCall('login'), authorization(['user', 'admin']), async (req, res) => {
     let PM = new ProductManagerMDB()
     let products = await PM.getProducts(req.query)
 
@@ -104,7 +105,7 @@ viewRouter.get('/products', async (req, res) => {
     
     let data = {
         products: products,
-        user: req.session.user
+        user: req.user
     }
     
     res.render('products', data)

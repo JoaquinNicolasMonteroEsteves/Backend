@@ -22,3 +22,5 @@ product_form.addEventListener('submit', e => {
         }
     })
 })
+
+

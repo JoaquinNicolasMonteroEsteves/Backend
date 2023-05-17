@@ -44,7 +44,7 @@
         </div>
     </div>
     <br/>
-    {{#if user.isAdmin}}
+    {{#isAdmin user.role}}
         <div >
             <h3>Add a new product to the store:</h3>
             <form id="add-product-form">
@@ -65,7 +65,7 @@
                 <input type='submit' />
             </form>
         </div>
-    {{/if}}
+    {{/isAdmin}}
     <div class="page_container">
         {{#if products.hasPrevPage}}
             <a href={{products.prevLink}}><< Page {{products.prevPage}}</a>

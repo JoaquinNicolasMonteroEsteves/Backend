@@ -2,7 +2,11 @@ import GitHubStrategy from 'passport-github2'
 import userModel from '../dao/models/user.model.js'
 import passport from 'passport'
 import passportLocal from 'passport-local'
-import { create_hash, is_valid_password } from '../utils.js'
+import { cookieExtractor, create_hash, is_valid_password, private_key } from '../utils.js'
+import jwtStrategy from 'passport-jwt'
+
+const JWTStrategy = jwtStrategy.Strategy
+const ExtractJWT = jwtStrategy.ExtractJwt
 
 const localStrategy = passportLocal.Strategy
 
@@ -67,28 +71,42 @@ const initializePassport = () => {
     }
   ))
   
-  // LOGIN STRATEGY:
-    passport.use('login', new localStrategy (
-        { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-        try {
-            let user = await userModel.findOne({ email: username })
-            if (!user) {
-            console.warn('User does not exist with user name: ' + username)
-            return done(null, false)
-            }
-            if (!is_valid_password(user, password)) {
-            console.warn('Invalid credentials for user: ' + username)
-            return done(null, false)
-            }
-            return done(null, user)
-        } catch (error) {
-            return done(error)
-            }
-        }
-    ))
-}
+//LOGIN STRATEGY using jwt:
+passport.use('login', new JWTStrategy(
+  {
+    jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+    secretOrKey: private_key
+  },
+  async (jwt_payload, done) => {
+    try {
+      return done(null, jwt_payload.user)
+    } catch (error) {
+      return done(`An error occured. Check for ${error}`)
+    }
+  }
+))
 
-//SERIALIZE AND DESERIALIZE FUNCTIONS:
+//   // LOGIN STRATEGY:
+//     passport.use('login', new localStrategy (
+//         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
+//         try {
+//             let user = await userModel.findOne({ email: username })
+//             if (!user) {
+//             console.warn('User does not exist with user name: ' + username)
+//             return done(null, false)
+//             }
+//             if (!is_valid_password(user, password)) {
+//             console.warn('Invalid credentials for user: ' + username)
+//             return done(null, false)
+//             }
+//             return done(null, user)
+//         } catch (error) {
+//             return done(error)
+//             }
+//         }
+//     ))
+
+  //SERIALIZE AND DESERIALIZE FUNCTIONS:
   passport.serializeUser((user, done) => {
     done(null, user.id)
   })
@@ -101,5 +119,8 @@ const initializePassport = () => {
       console.error('An error ocurred while deserealizing the user:' + error)
     }
   })
+}
+
+
 
 export default initializePassport

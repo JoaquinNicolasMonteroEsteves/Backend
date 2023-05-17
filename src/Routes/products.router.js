@@ -5,22 +5,22 @@ import { readLinkFilter } from "../utils.js";
 
 const routerP = Router();
 
-//MongoDB
-routerP.get('/', async (req, res) => {
-    try {
-        let PM = new ProductManagerMDB()
-        let products = await PM.getProducts(req.query)  
+// //MongoDB
+// routerP.get('/', async (req, res) => {
+//     try {
+//         let PM = new ProductManagerMDB()
+//         let products = await PM.getProducts(req.query)  
 
-        let link_filter = readLinkFilter(req.query)
-        products.prevLink = products.hasPrevPage? `http://localhost:8080/api/products?${link_filter}page=${products.prevPage}`:'None'
-        products.nextLink = products.hasNextPage? `http://localhost:8080/api/products?${link_filter}page=${products.nextPage}`:'None'
-        products.status = products ? "success" : "error"
+//         let link_filter = readLinkFilter(req.query)
+//         products.prevLink = products.hasPrevPage? `http://localhost:8080/api/products?${link_filter}page=${products.prevPage}`:'None'
+//         products.nextLink = products.hasNextPage? `http://localhost:8080/api/products?${link_filter}page=${products.nextPage}`:'None'
+//         products.status = products ? "success" : "error"
 
-        res.send(products)
-    } catch (error) {
-        return error
-    }
-})
+//         res.send(products)
+//     } catch (error) {
+//         return error
+//     }
+// })
 
 routerP.post('/', async (req, res) => {
     try
@@ -28,7 +28,6 @@ routerP.post('/', async (req, res) => {
         let PM = new ProductManagerMDB()
         // console.log(req.body);
         let result = await PM.addProduct(req.body)
-        console.log(result);
         if(!result.status) {
             res.status(405).send({status: 'Error', msg: "An error occurred while trying to add a new product"})
         }
