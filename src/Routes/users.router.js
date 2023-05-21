@@ -15,16 +15,8 @@ routerU.get('/register', (req, res)=>{
     res.render("register");
 })
 
-// routerU.get('/', (req, res)=>{
-//     res.render('profile', {
-//       user: req.session.user
-//     });
-//   })
-
-
 routerU.get('/', authJWToken, (req, res)=>{
     res.render("profile", {
-        // user: req.session.user
         user: req.user
     });
 })

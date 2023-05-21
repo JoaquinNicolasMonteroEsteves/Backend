@@ -2,14 +2,17 @@ import { Router } from "express";
 import userModel from "../Services/models/user.model.js";
 import { generateJWToken, is_valid_password } from "../utils.js";
 import passport from "passport";
+import UserSerivce from "../Services/Users.Service.js";
 
 const routerS = Router()
+let US = new UserSerivce()
 
 // LOGIN using jwt:
 routerS.post('/login', async (req, res)=>{
   const {email, password} = req.body
   try {
-    const user = await userModel.findOne({ email: email })
+    const user = await US.getUser({ email: email })
+    // const user = await userModel.findOne({ email: email })
     if (!user) {
       console.warn('User does not exist with username: ' + email)
       return res.status(204).send({ error: 'Not found', message: 'User does not exist with username: ' + email })

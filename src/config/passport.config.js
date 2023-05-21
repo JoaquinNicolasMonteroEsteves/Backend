@@ -4,11 +4,15 @@ import passport from 'passport'
 import passportLocal from 'passport-local'
 import { cookieExtractor, create_hash, is_valid_password, private_key } from '../utils.js'
 import jwtStrategy from 'passport-jwt'
+import UserSerivce from '../Services/Users.Service.js'
 
 const JWTStrategy = jwtStrategy.Strategy
 const ExtractJWT = jwtStrategy.ExtractJwt
 
 const localStrategy = passportLocal.Strategy
+
+let US = new UserSerivce()
+
 
 const initializePassport = () => {
 
@@ -20,8 +24,7 @@ const initializePassport = () => {
 
     }, async (accessToken, refreshToken, profile, done) =>{
         try {
-            console.log(profile);
-            let user = await userModel.findOne({email:profile._json.email})
+            let user = await US.getUser({email:profile._json.email})
             if(!user) {
                 let newUser = {
                     first_name: profile._json.name,
@@ -31,7 +34,7 @@ const initializePassport = () => {
                     password:'-',
                     loggedBy: "Github"
                 }
-                let result = await userModel.create(newUser)
+                let result = await US.createUser(newUser)
                 return done(null, result)
             } else {
                 return done(null,user)
@@ -50,19 +53,19 @@ const initializePassport = () => {
           console.log('Please, complete all the fields!')
           return done(null, false)
         } else {
-          let exists = await userModel.findOne({email})
+          let exists = await US.getUser({email: email})
           if (exists) {
             console.log('An user with this email already exists')
             return done(null, false)
           }
-          let user = {
+          let newUser = {
             first_name,
             last_name,
             email,
             age,
             password: create_hash(password)
           }
-          let result = await userModel.create(user)
+          let result = await US.createUser(newUser)
           return done(null, result)
         }
       } catch (error) {
@@ -86,26 +89,6 @@ passport.use('login', new JWTStrategy(
   }
 ))
 
-//   // LOGIN STRATEGY:
-//     passport.use('login', new localStrategy (
-//         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-//         try {
-//             let user = await userModel.findOne({ email: username })
-//             if (!user) {
-//             console.warn('User does not exist with user name: ' + username)
-//             return done(null, false)
-//             }
-//             if (!is_valid_password(user, password)) {
-//             console.warn('Invalid credentials for user: ' + username)
-//             return done(null, false)
-//             }
-//             return done(null, user)
-//         } catch (error) {
-//             return done(error)
-//             }
-//         }
-//     ))
-
   //SERIALIZE AND DESERIALIZE FUNCTIONS:
   passport.serializeUser((user, done) => {
     done(null, user.id)
@@ -113,7 +96,7 @@ passport.use('login', new JWTStrategy(
 
   passport.deserializeUser(async (id, done) => {
     try {
-      let user = await userModel.findById(id)
+      let user = await US.getUser({id: id})
       done(null, user)
     } catch (error) {
       console.error('An error ocurred while deserealizing the user:' + error)
