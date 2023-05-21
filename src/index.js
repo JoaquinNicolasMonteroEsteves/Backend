@@ -10,20 +10,26 @@ import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
 import session from 'express-session'
 import mongoose from 'mongoose'
-import productModel from './dao/models/product.model.js'
+import productModel from './Services/models/product.model.js'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
+import config from './config/config.js'
 
 const app = express()
-const PORT = 8080
+const PORT = config.port
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 initializePassport()
+app.use(session({
+    secret: "JMS3cret",
+    resave: true,
+    saveUninitialized: true
+}))
 app.use(passport.initialize())
-app.use(passport,session())
+app.use(passport.session())
 app.use(cookieParser('BackendJNME'))
 
 app.engine('handlebars', handlebars.engine())
@@ -39,17 +45,13 @@ hbs.handlebars.registerHelper("isAdmin", function (role, options) {
     return options.inverse(this) 
 })
 
-app.use(session({
-    secret: "JMS3cret",
-    resave: true,
-    saveUninitialized: true
-}))
+
 
 const httpServer = app.listen(PORT, () => {
 	console.log("Servidor escuchando por el puerto: " + PORT);
 })
 
-const DB = 'mongodb+srv://joaquinnme:contrademongo1@cluster0.bg1fcu8.mongodb.net/ecommerce'
+const DB = config.mongoUrl
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(DB)

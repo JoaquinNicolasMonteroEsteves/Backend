@@ -1,28 +1,22 @@
 import { Router } from 'express'
-import ProductManager from '../dao/Dao/ProductManagerFS.js'
-import ProductManagerMDB from '../dao/Dao/ProductManagerMongoDB.js'
+import ProductService from '../Services/Product.Service.js'
+import CartService from '../Services/Cart.Service.js'
 import cookieParser from 'cookie-parser'
-import session from 'express-session'
 import { authorization, passportCall, readLinkFilter } from '../utils.js'
-import CartManagerDB from '../dao/Dao/CartManagerMongoDB.js'
 
 const viewRouter = Router()
+let PS = new ProductService()
+let CS = new CartService()
 
 // Habilitación de las cookies
 viewRouter.use(cookieParser("JM%&/123"))
 
 viewRouter.get('/setCookies', (req, res) => {
-    //Cookie sin firma    
-    //res.cookie('cookieJM', 'Esto es una cookie', {maxAge: 60000}).send('Cookie') //Nombre, valor, tdv
-    
     //Cookie con firma
     res.cookie('cookieJM', 'Esto es una cookie', {maxAge: 60000, signed: true}).send('Cookie') //Nombre, valor, tdv + firma
 })
 
 viewRouter.get('/getCookies', (req, res) => {
-    //Lectura de cookie sin firma
-    //res.send(req.cookies)
-
     //Lectura de cookie con firma
     res.send(req.signedCookies) //Me traigo el valor de la cookie
 })
@@ -42,29 +36,10 @@ viewRouter.get('/session', (req, res) => {
     }
 })
 
-// //Loggin
-// viewRouter.get('/login', (req, res) => {
-//     const {username, password} = req.query
-
-//     if (username !== 'pepe' || password !== 'pepepass') {
-//         return res.status(401).send("Failed loggin or data entrance")
-//     } else {
-//         req.session.user = username
-//         req.session.admin = true
-//         res.send("Loggin successfull!")
-//     }
-// })
 
 //Loggin
 viewRouter.get('/logout', (req, res) => {
     res.clearCookie("jwtCookieToken").status(200).send()
-    // req.session.destroy(error => {
-    //     if (error) {
-    //         res.json({error: "Logout error", msg: "Failed on closing session"})
-    //     } else {
-    //         res.status(200).send()
-    //     }
-    // })
 })
 
 //Autenticación
@@ -82,21 +57,17 @@ viewRouter.get('/private', auth, (req, res) => {
 })
 
 viewRouter.get('/', async (req, res) =>{
-    let productManager = new ProductManager()
-    let products = await productManager.getProducts()
+    let products = await PS.getProducts()
     res.render('home', {products})
 })
 
 viewRouter.get('/carts/:cid', async (req, res) => {
-    let CM = new CartManagerDB()
-    let result = await CM.getCartById(req.params.cid)
+    let result = await CS.getCartById(req.params.cid)
     res.render('cart', result)
 })
 
 viewRouter.get('/products', passportCall('login'), authorization(['user', 'admin']), async (req, res) => {
-    let PM = new ProductManagerMDB()
-    let products = await PM.getProducts(req.query)
-
+    let products = await PS.getProducts(req.query)
     let link_filter = readLinkFilter(req.query)
     
     products.prevLink = products.hasPrevPage? `http://localhost:8080/products?${link_filter}page=${products.prevPage}`:'None'

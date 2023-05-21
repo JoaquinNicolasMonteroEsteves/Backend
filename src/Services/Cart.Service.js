@@ -1,7 +1,7 @@
-import cartModel from "../models/cartModel.js"
-import productModel from "../models/product.model.js"
+import cartModel from "./models/cartModel.js"
+import productModel from "./models/product.model.js"
 
-class CartManagerDB {
+export default class CartService {
 
     getCartById = async (cartId) => {
         try
@@ -101,4 +101,3 @@ class CartManagerDB {
     }
 }
 
-export default CartManagerDB

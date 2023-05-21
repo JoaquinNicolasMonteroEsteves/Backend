@@ -1,5 +1,5 @@
 import GitHubStrategy from 'passport-github2'
-import userModel from '../dao/models/user.model.js'
+import userModel from '../Services/models/user.model.js'
 import passport from 'passport'
 import passportLocal from 'passport-local'
 import { cookieExtractor, create_hash, is_valid_password, private_key } from '../utils.js'

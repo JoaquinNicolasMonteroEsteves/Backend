@@ -1,6 +1,6 @@
-import productModel from "../models/product.model.js";
+import productModel from "./models/product.model.js";
 
-class ProductManagerMDB {
+export default class ProductService {
     getProducts = async (query) => {
         try {
             let limit = query.limit ? parseInt(query.limit) : 10
@@ -49,4 +49,3 @@ class ProductManagerMDB {
 
 }
 
-export default ProductManagerMDB
