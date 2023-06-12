@@ -1,8 +1,8 @@
 import { Router } from "express";
-import userModel from "../Services/models/user.model.js";
 import { generateJWToken, is_valid_password } from "../utils.js";
 import passport from "passport";
 import UserSerivce from "../Services/Users.Service.js";
+import userDTO from "../Services/DTO/users.dto.js";
 
 const routerS = Router()
 let US = new UserSerivce()
@@ -12,7 +12,6 @@ routerS.post('/login', async (req, res)=>{
   const {email, password} = req.body
   try {
     const user = await US.getUser({ email: email })
-    // const user = await userModel.findOne({ email: email })
     if (!user) {
       console.warn('User does not exist with username: ' + email)
       return res.status(204).send({ error: 'Not found', message: 'User does not exist with username: ' + email })
@@ -21,14 +20,9 @@ routerS.post('/login', async (req, res)=>{
       console.warn('Invalid credentials for user: ' + email)
       return res.status(401).send({ status: 'error', error: 'User and password do not match!' })
     }
-    const tokenUser = {
-      name : `${user.first_name} ${user.last_name}`,
-      email: user.email,
-      age: user.age,
-      role: user.role
-    }
+    const tokenUser = new userDTO(user)
     const access_token = generateJWToken(tokenUser)
-    res.cookie('jwtCookieToken', access_token, { maxAge: 60000, httpOnly: true }) // 1 min
+    res.cookie('jwtCookieToken', access_token, { maxAge: 600000, httpOnly: true }) // 1 min
     res.send({message: 'Login successful!', jwt: access_token })
   } catch (error) {
     console.error(error)
@@ -42,7 +36,8 @@ routerS.post('/register', passport.authenticate('register', { failureRedirect: '
     console.log('New user successfylly created')
     res.status(201).send({status: "success", msg: 'User created successfully created'})
 })
-    routerS.get('/fail-register', (req, res) => {
+
+routerS.get('/fail-register', (req, res) => {
   res.status(401).send({ error: "Failed to process register!" })
 })
 

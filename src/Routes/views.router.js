@@ -82,6 +82,20 @@ viewRouter.get('/products', passportCall('login'), authorization(['user', 'admin
     res.render('products', data)
 })
 
+viewRouter.get('/api/cart/:cid/purchase', async (req, res) => {
+    
+})
+
+viewRouter.get('/current', passportCall('login'), authorization(['user', 'admin']), async (req, res) => {
+    let data = {
+        user: req.user,
+        isAdmin: req.user.role === "admin" ? true : false,
+        cart: req.user.cart_id ? await CS.getCartById(req.user.cart_id) : null
+    }
+    
+    res.render('profile', data)
+})
+
 viewRouter.get('/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })

@@ -5,6 +5,7 @@ import passportLocal from 'passport-local'
 import { cookieExtractor, create_hash, is_valid_password, private_key } from '../utils.js'
 import jwtStrategy from 'passport-jwt'
 import UserSerivce from '../Services/Users.Service.js'
+import CartService from '../Services/Cart.Service.js'
 
 const JWTStrategy = jwtStrategy.Strategy
 const ExtractJWT = jwtStrategy.ExtractJwt
@@ -12,7 +13,7 @@ const ExtractJWT = jwtStrategy.ExtractJwt
 const localStrategy = passportLocal.Strategy
 
 let US = new UserSerivce()
-
+let CS = new CartService()
 
 const initializePassport = () => {
 
@@ -58,11 +59,13 @@ const initializePassport = () => {
             console.log('An user with this email already exists')
             return done(null, false)
           }
+          let new_cart = await CS.addCart()
           let newUser = {
             first_name,
             last_name,
             email,
             age,
+            cart_id: new_cart.id,
             password: create_hash(password)
           }
           let result = await US.createUser(newUser)

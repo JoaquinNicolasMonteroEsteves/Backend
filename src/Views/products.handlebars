@@ -9,7 +9,7 @@
         </label>
         <ul class="menu">
             {{#if user}}
-                <li><a href="/users">Profile</a></li>
+                <li><a href="/current">Profile</a></li>
                 <li><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium;">Logout</a></button></form></li>
             {{else}}
                 <li><a href="/users/login">Login</a></li>
@@ -21,9 +21,7 @@
     <div>
         {{#if user}}
         <div class="user_div">
-            <h2>Bienvenid@</h2>
-            <h2>{{user.name}}!</h2>
-            <p><b>Age:</b> {{user.age}} <b>Role:</b> {{user.role}}  </br> <b>Email:</b> {{user.email}}</p>
+            <h2>{{user.name}}</h2>
         </div>
         {{/if}}
         <h1>Products from MongoDB:</h1>
@@ -36,9 +34,11 @@
                         <li>{{this.description}}</li>
                         <li>Stock: {{this.stock}}</li>
                     </ul>
-                    <form class = "form_btn_add" method="POST" action='/api/carts/644857ef4d114bbc1bb0b615/products/{{this._id}}'>
-                        <button class="btn" type='submit'> + CART </button>
-                    </form>
+                    {{#isAdmin ../user.role}}
+                    <h3><a>Editar productos</a></h3>
+                    {{else}}
+                    <button class="btn" type='submit' onclick="addProductToCart('{{../user.cart_id}}', '{{this._id}}', '{{this.title}}')"> + CART </button>
+                    {{/isAdmin}}
                 </div>
             {{/each}}
         </div>
@@ -80,4 +80,4 @@
 </div>    
 <script src="/js/logout.js"></script>
 <script src="/js/form.js"></script>
-<script src="/js/navbar.js"></script>
+<script src="/js/carts.js"></script>

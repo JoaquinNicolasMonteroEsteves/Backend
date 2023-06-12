@@ -37,7 +37,16 @@ export default class ProductService {
             return (`Error adding a new product, check your connection. Detail: ${error}`)
         }
     }
-
+    
+    updateProduct = async (id, updatedInfo) => {
+        try {
+          await productModel.findOneAndUpdate({ _id: id }, updatedInfo)
+          let updatedProduct = await productModel.findOne({ _id: id })??null
+          return updatedProduct
+        } catch (error) {
+          retrun `An error has occurred by updating a product. Error detail: ${error}`
+        }
+      }
 
     #defineStock = (stock) => {
         let s

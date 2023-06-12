@@ -45,6 +45,13 @@ hbs.handlebars.registerHelper("isAdmin", function (role, options) {
     return options.inverse(this) 
 })
 
+hbs.handlebars.registerHelper("isMoreThanOne", function (quantity, options) {
+    if (quantity > 1) {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
+
 
 
 const httpServer = app.listen(PORT, () => {

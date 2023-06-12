@@ -5,7 +5,7 @@ const routerU = Router();
 
 routerU.get('/', passportCall('login'), authorization(['admin','user']), (req, res) => {
     res.render('profile', { user: req.user})
-}) // ERROR: Login GITHUB me redirige acá y como no tiene auth da usuario no encontrado!
+})
 
 routerU.get('/login', (req, res)=>{
     res.render("login");

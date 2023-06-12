@@ -16,7 +16,7 @@ export default class UserSerivce {
     getUser = async (email = null, id = null) => {
         try {
             if (email) {
-                const user = await userModel.findOne({ email: email })
+                const user = await userModel.findOne(email)
                 return user
             }
             else if (id) {
@@ -27,4 +27,12 @@ export default class UserSerivce {
             return (`Error getting user from database. Detail ${error}`)
         }
     }
+
+    updateUserCartID = async (userID, cartID) => {
+        try {
+          await userModel.findOneAndUpdate({ _id: userID }, {cart_id: cartID})
+        } catch (error) {
+          retrun `An error has occurred by updating a user. Error detail: ${error}`
+        }
+      }
 }

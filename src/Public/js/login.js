@@ -18,7 +18,7 @@ login_form.addEventListener('submit', e => {
           localStorage.setItem('authToken', json.access_token)
           localStorage.setItem('USER_ID', json.id)
           alert('Successfull login!')
-          window.location.replace('/products')
+          window.location.replace('/current')
         })
       } else if (result.status === 401) {
         alert("Invalid login")

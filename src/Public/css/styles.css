@@ -89,3 +89,14 @@ label {
 a:active {
     text-decoration: underline;
 }
+
+.personal_info_div {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.personal_info_div_ch {
+    display: flex;
+    align-items: flex-end;
+}

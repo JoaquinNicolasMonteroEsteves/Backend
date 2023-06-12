@@ -18,13 +18,46 @@
         </ul>
     </section>
     {{#if user}}
-        <h1>Profile (whitout sensitive data)</h1>
-        <p>{{user.name}}</p>
-        <p>{{user.email}}</p>
-        <p>{{user.age}}</p>
+    <h2>Personal information:</h2>
+    <ul class="personal_info_div">
+        <div class="personal_info_div_ch"><h4>Name:&nbsp</h4><p>{{user.name}}</p></div>
+        <div class="personal_info_div_ch"><h4>Email:&nbsp</h4><p>{{user.email}}</p></div>
+        <div class="personal_info_div_ch"><h4>Age:&nbsp</h4><p>{{user.age}}</p></div>
+        <div class="personal_info_div_ch"><h4>Role:&nbsp</h4><p>{{user.role}}</p></div>
+    </ul>
     {{else}}
         <h1>There is no session detected</h1>
+    {{/if}}
+    {{#if isAdmin}}
+    <h2>You are admin!</h2>
+    {{else}}
+    <div>
+        {{#if cart.products.length}}
+            <h2>Your cart content by now:</h2>
+                <div>
+                    <h3>Products:</h3>
+                        {{#each cart.products}}
+                            <div>
+                                <ul>
+                                    <li><h4>Product title: {{this.product.title}}</h4></li>
+                                    <li><p>Quantity in cart: {{this.quantity}}</p></li>
+                                </ul>
+                                <li><button type="submit" onclick="deleteProduct('{{../cart._id}}', '{{this.product._id}}')">Delete product</button></li>
+                                <li><button type="submit" onclick="addProductUnit('{{../cart._id}}', '{{this.product._id}}', '{{this.product.title}}')">Add 1 unit</button></li>
+                                {{#isMoreThanOne this.quantity}}
+                                <li><button type="submit" onclick="subtractProductUnit('{{../cart._id}}', '{{this.product._id}}')">Subtract 1 unit</button></li>
+                                {{/isMoreThanOne}}
+                            </div>
+                        {{/each}}
+                </br>
+                    <button onclick="purchaseCart('{{cart._id}}')">Realizar compra</button>
+                </div>
+        {{else}}
+            <h2>Your cart is currently empty</h2>
+        {{/if}}
+    </div>
     {{/if}}
 </div>
 
 <script src="/js/logout.js"></script>
+<script src="/js/carts.js"></script>
