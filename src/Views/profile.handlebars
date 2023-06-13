@@ -42,10 +42,10 @@
                                     <li><h4>Product title: {{this.product.title}}</h4></li>
                                     <li><p>Quantity in cart: {{this.quantity}}</p></li>
                                 </ul>
-                                <li><button type="submit" onclick="deleteProduct('{{../cart._id}}', '{{this.product._id}}')">Delete product</button></li>
-                                <li><button type="submit" onclick="addProductUnit('{{../cart._id}}', '{{this.product._id}}', '{{this.product.title}}')">Add 1 unit</button></li>
+                                <button type="submit" onclick="deleteProduct('{{../cart._id}}', '{{this.product._id}}')">Delete product</button></li>
+                                <button type="submit" onclick="addProductUnit('{{../cart._id}}', '{{this.product._id}}', '{{this.product.title}}')">Add 1 unit</button></li>
                                 {{#isMoreThanOne this.quantity}}
-                                <li><button type="submit" onclick="subtractProductUnit('{{../cart._id}}', '{{this.product._id}}')">Subtract 1 unit</button></li>
+                                <button type="submit" onclick="subtractProductUnit('{{../cart._id}}', '{{this.product._id}}')">Subtract 1 unit</button></li>
                                 {{/isMoreThanOne}}
                             </div>
                         {{/each}}

@@ -13,12 +13,12 @@ routerS.post('/login', async (req, res)=>{
   try {
     const user = await US.getUser({ email: email })
     if (!user) {
-      console.warn('User does not exist with username: ' + email)
-      return res.status(204).send({ error: 'Not found', message: 'User does not exist with username: ' + email })
+      // console.warn('User does not exist with username: ' + email)
+      return res.status(401).send({ status: 'Not found', message: 'User does not exist with username: ' + email })
     }
     if (!is_valid_password(user, password)) {
-      console.warn('Invalid credentials for user: ' + email)
-      return res.status(401).send({ status: 'error', error: 'User and password do not match!' })
+      // console.warn('Invalid credentials for user: ' + email)
+      return res.status(401).send({ status: 'error', message: 'User and password do not match!' })
     }
     const tokenUser = new userDTO(user)
     const access_token = generateJWToken(tokenUser)

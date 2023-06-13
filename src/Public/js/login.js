@@ -21,7 +21,10 @@ login_form.addEventListener('submit', e => {
           window.location.replace('/current')
         })
       } else if (result.status === 401) {
-        alert("Invalid login")
+        result.json()
+        .then(json => {
+          alert(json.message)
+        })
       }
     })
   })

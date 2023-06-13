@@ -45,7 +45,7 @@
     </div>
     <br/>
     {{#isAdmin user.role}}
-        <div >
+        <div>
             <h3>Add a new product to the store:</h3>
             <form id="add-product-form">
                     <label>Title:</label>
@@ -65,6 +65,17 @@
                 <input type='submit' />
             </form>
         </div>
+    {{else}}
+        <div>
+            <form title='{{user.email}}' id="chatBoxForm">
+                <input placeholder="Write your message here" id="chatBox" type="text">
+                <input value='Send' type='submit' />
+            </form>
+
+            <div>
+                <p id="messageLogs"></p>
+            </div>
+        </div>
     {{/isAdmin}}
     <div class="page_container">
         {{#if products.hasPrevPage}}
@@ -78,6 +89,8 @@
         {{/if}} 
     </div>
 </div>    
+<script src='/socket.io/socket.io.js'></script>
 <script src="/js/logout.js"></script>
 <script src="/js/form.js"></script>
 <script src="/js/carts.js"></script>
+<script src="/js/messages.js"></script>

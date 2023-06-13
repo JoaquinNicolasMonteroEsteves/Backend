@@ -10,11 +10,11 @@ import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
 import session from 'express-session'
 import mongoose from 'mongoose'
-import productModel from './Services/models/product.model.js'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import config from './config/config.js'
+import routerM from './Routes/messages.router.js'
 
 const app = express()
 const PORT = config.port
@@ -73,12 +73,16 @@ connectMongoDB()
 app.use(express.static(__dirname+'/public'))
 
 
-let productsDB = await productModel.find()
 
 const socketServer = new Server(httpServer)
+
+let messages = []
 socketServer.on('connection', socket => {
-    console.log("cliente conectado")
-    socket.emit("hola",  productsDB )
+    socket.on('message', data => {
+        messages.push(data)
+        socketServer.emit('messageLogs', messages)
+    })
+    
 })
 
 
@@ -87,6 +91,7 @@ app.use('/users', routerU)
 app.use('/api/sessions', routerS)
 app.use('/api/products', routerP)
 app.use('/api/carts', routerC)
+app.use('/api/messages', routerM)
 app.use('/github', routerG)
 
 

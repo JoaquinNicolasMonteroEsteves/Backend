@@ -1,3 +1,4 @@
+import { create_hash } from "../utils.js"
 import cartModel from "./models/cartModel.js"
 import productModel from "./models/product.model.js"
 import ticketModel from "./models/ticket.model.js"
@@ -149,35 +150,58 @@ export default class CartService {
             let user = await userModel.findOne({ cart_id: cartID})
             let available = this.#checkStock(cart)
 
-            if(available.stock && cart && user) {
+            if(available.stock) {
+
                 let newTicket = this.#createTicket(cart, user)
                 this.deleteAllProductsFromCart(cartID)
-
+                
                 cart.products.forEach(p => {
                     PS.updateProduct(p.product._id, { stock: p.product.stock - p.quantity})
                 })
 
                 return newTicket
             } else {
+
                 let nonStockProducts = []
+                //Defino un nuevo carrito para la compra
+                let StockCart = await cartModel.findOne({_id: cartID})
+                
                 //Busco los productos enteros con los IDs que me traigo de checkStock
                 available.no_stock.forEach(x => {
                     let a = cart.products.find(p => p.product._id == x)
                     nonStockProducts.push(a)
                 })
+
                 //Quito los productos que no hay stock del carrito
-                nonStockProducts.forEach(p => {
-                    cart.products.splice(cart.products.indexOf(p), 1)
+                nonStockProducts.forEach((p) => {
+                    StockCart.products.splice(StockCart.products.indexOf(p), 1) //--> Está sacando el producto incorrecto
                 })
-                //Genero el ticket y vacío el carrito
-                let newTicket = this.#createTicket(cart, user)
-                this.deleteAllProductsFromCart(cartID)
-                //Vuelvo a agregar los productos que no había stock al carrito
-                available.no_stock.forEach(p => {
-                    this.addProductToCart(cartID, p)
+                
+                
+                //Genero el ticket
+                let newTicket = this.#createTicket(StockCart, user)
+                
+                let StockProducts = []
+                //Defino un nuevo carrito para actualizar la BD luego de la compra
+                let nonStockCart = await cartModel.findOne({_id: cartID})
+                
+                //Busco los productos enteros con los IDs que NO me traigo de checkStock
+                available.no_stock.forEach(x => {
+                    let a = cart.products.find(p => p.product._id != x)
+                    StockProducts.push(a)
                 })
-                //Actualizo el stock de cada producto
-                cart.products.forEach(p => {
+                
+                //Quito los productos que hay stock del carrito
+                StockProducts.forEach(p => {
+                    nonStockCart.products.splice(cart.products.indexOf(p), 1)
+                })
+
+                //Actualizo el carrito de la BD con los productos que no pude comprar (almacenados en nonStockCart)
+                await cartModel.findByIdAndUpdate({_id: cartID}, nonStockCart)
+
+                
+                //Actualizo el stock de cada producto en la BD
+                StockCart.products.forEach(p => {
                     PS.updateProduct(p.product._id, { stock: p.product.stock - p.quantity})
                 })
 
