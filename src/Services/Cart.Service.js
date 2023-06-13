@@ -123,7 +123,7 @@ export default class CartService {
                 stock = true
             } else {
                 stock = false
-                no_stock.push(p.product._id)
+                no_stock.push(p.product.id)
             }
         })
         no_stock.length > 0 ? stock=false : stock=true
@@ -167,11 +167,14 @@ export default class CartService {
                 let StockCart = await cartModel.findOne({_id: cartID})
                 
                 //Busco los productos enteros con los IDs que me traigo de checkStock
+                // console.log(available.no_stock);
+
                 available.no_stock.forEach(x => {
-                    let a = cart.products.find(p => p.product._id == x)
+                    console.log(x);
+                    let a = StockCart.products.find(p => p.product.id == x)
                     nonStockProducts.push(a)
                 })
-
+                
                 //Quito los productos que no hay stock del carrito
                 nonStockProducts.forEach((p) => {
                     StockCart.products.splice(StockCart.products.indexOf(p), 1) //--> Está sacando el producto incorrecto
