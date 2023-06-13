@@ -74,11 +74,11 @@ viewRouter.get('/products', passportCall('login'), authorization(['user', 'admin
     products.nextLink = products.hasNextPage? `http://localhost:8080/products?${link_filter}page=${products.nextPage}`:'None'
     products.status = products ? "success" : "error"
     
-    products.docs.forEach(p => {
-        if(p.stock == 0) {
-            products.docs.splice(products.docs.indexOf(p), 1)
-        }
-    })
+    // products.docs.forEach(p => {
+    //     if(p.stock == 0) {
+    //         products.docs.splice(products.docs.indexOf(p), 1)
+    //     }
+    // })
 
     let data = {
         products: products,
