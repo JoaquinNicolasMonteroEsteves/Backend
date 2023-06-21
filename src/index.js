@@ -15,7 +15,7 @@ import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import config from './config/config.js'
 import routerM from './Routes/messages.router.js'
-import routerE from './Routes/email.router.js'
+import routerMocks from './Routes/mock.router.js'
 
 const app = express()
 const PORT = config.port
@@ -93,5 +93,5 @@ app.use('/api/sessions', routerS)
 app.use('/api/products', routerP)
 app.use('/api/carts', routerC)
 app.use('/api/messages', routerM)
-app.use('/mail', routerE)
 app.use('/github', routerG)
+app.use('/mockingproducts', routerMocks)

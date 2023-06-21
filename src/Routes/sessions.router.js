@@ -3,6 +3,8 @@ import { generateJWToken, is_valid_password } from "../utils.js";
 import passport from "passport";
 import UserSerivce from "../Services/Users.Service.js";
 import userDTO from "../Services/DTO/users.dto.js";
+import EErrors from '../Services/Errors/error-enum.js'
+import CustomError from '../Services/Errors/customError.js'
 
 const routerS = Router()
 let US = new UserSerivce()
@@ -14,19 +16,32 @@ routerS.post('/login', async (req, res)=>{
     const user = await US.getUser({ email: email })
     if (!user) {
       // console.warn('User does not exist with username: ' + email)
-      return res.status(401).send({ status: 'Not found', message: 'User does not exist with username: ' + email })
+      // return res.status(401).send({ status: 'Not found', message: 'User does not exist with username: ' + email })
+      CustomError.createError({
+        name: 'User login error',
+        cause: 'User does not exist',
+        message: `User does not exist with username + ${email}. Please verify your email or register first if you don't have an account on this site.`,
+        code: EErrors.NOT_FOUND
+      })
     }
     if (!is_valid_password(user, password)) {
       // console.warn('Invalid credentials for user: ' + email)
-      return res.status(401).send({ status: 'error', message: 'User and password do not match!' })
+      // return res.status(401).send({ status: 'error', message: 'User and password do not match!' })
+      CustomError.createError({
+        name: 'User login error',
+        cause: 'Invalid credentials',
+        message: `Username ${email} and password do not match! Please, try again.`,
+        code: EErrors.INVALID_CREDENTIALS
+      })
     }
     const tokenUser = new userDTO(user)
     const access_token = generateJWToken(tokenUser)
-    res.cookie('jwtCookieToken', access_token, { maxAge: 600000, httpOnly: true }) // 1 min
+    res.cookie('jwtCookieToken', access_token, { maxAge: 600000, httpOnly: true }) // 10 min
     res.send({message: 'Login successful!', jwt: access_token })
   } catch (error) {
     console.error(error)
-    return res.status(500).send({ status:'error', error:'Internal application error'})
+    // return res.status(500).send({ status:'error', error:'Internal application error'})
+    res.status(400).json({ status: 'Error', message: error.message })
   }
 })
 

@@ -1,4 +1,3 @@
-import { create_hash } from "../utils.js"
 import cartModel from "./models/cartModel.js"
 import productModel from "./models/product.model.js"
 import ticketModel from "./models/ticket.model.js"
@@ -137,7 +136,8 @@ export default class CartService {
             code: Math.floor(Math.random()*2000000+1).toString(),
             purchase_datetime: Date.now(),
             amount: totalAmount,
-            purchaser: user.email
+            purchaser: user.email,
+            products: cart.products
         }
         let userTicket = await ticketModel.create(new_ticket)
         return userTicket
@@ -174,11 +174,11 @@ export default class CartService {
             let user = await userModel.findOne({ cart_id: cartID})
             let available = this.#checkStock(cart)
 
-            if(available.stock) {
-
+            if(available.stock && !(available.no_stock.length == cart.products.length)) {
                 let newTicket = this.#createTicket(cart, user)
                 this.deleteAllProductsFromCart(cartID)
-                
+
+
                 cart.products.forEach(p => {
                     PS.updateProduct(p.product._id, { stock: p.product.stock - p.quantity})
                 })
@@ -188,7 +188,6 @@ export default class CartService {
             } else {
 
                 let nonStockProducts = []
-
                 //Defino un nuevo carrito para la compra
                 let StockCart = await cartModel.findOne({_id: cartID})
                 

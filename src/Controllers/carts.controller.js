@@ -1,8 +1,10 @@
 import CartService from "../Services/Cart.Service.js"
 import UserSerivce from "../Services/Users.Service.js"
+import EmailService from "../Services/Email.Service.js"
 
 let US = new UserSerivce()
 let CS = new CartService()
+let ES = new EmailService()
 
 export const addCart = async (req, res) => {
     let result = await CS.addCart()
@@ -36,6 +38,8 @@ export const addProductToCart = async (req, res) => {
 }
 
 export const purchaseCart = async (req, res) => {
-    let result = await CS.purchaseCart(req.params.cid)
+    let ticket = await CS.purchaseCart(req.params.cid)
+    let mailing = await ES.sendEmail(ticket)
+    let result = {newTicket: ticket, mailingFailed: mailing.mailingFailed, mailingText: mailing.mailingText}
     res.status(202).send(result)
 }

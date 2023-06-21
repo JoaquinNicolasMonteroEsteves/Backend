@@ -67,8 +67,13 @@ const purchaseCart = (cartID) => {
     }).then((response) => {
         if(response.ok) {
             response.json()
-            .then(ticket => {
-                alert(`Your ticket with code: ${ticket.code} was successfully generated. Thanks for buying! You can check non-stock products will remain in your cart.`);
+            .then(data => {
+
+              if(data.mailingFailed) {
+                alert(`Your ticket with code: ${data.newTicket.code} was successfully generated ${data.mailingText}. Thanks for buying! You can check non-stock products will remain in your cart.`);
+              }
+              console.log("Aca");
+                alert(`Your ticket with code: ${data.newTicket.code} was successfully generated ${data.mailingText}. Thanks for buying! You can notice check non-stock products will remain in your cart.`);
                 setTimeout(() => {
                     window.location.replace('/current')
                 }, 500)

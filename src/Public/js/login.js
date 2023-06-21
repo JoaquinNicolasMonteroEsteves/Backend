@@ -12,7 +12,7 @@ login_form.addEventListener('submit', e => {
         'Content-type': 'application/json'
       }
     }).then(result => {
-      if(result.status === 200) {
+      if(result.ok) {
         result.json()
         .then(json => {
           localStorage.setItem('authToken', json.access_token)
@@ -20,10 +20,11 @@ login_form.addEventListener('submit', e => {
           alert('Successfull login!')
           window.location.replace('/current')
         })
-      } else if (result.status === 401) {
-        result.json()
-        .then(json => {
-          alert(json.message)
+      } else {
+        return result.json().then((error) => {
+          console.log(error)
+          console.log(error.message)
+          alert('Invalid login: ' + error.message)
         })
       }
     })
