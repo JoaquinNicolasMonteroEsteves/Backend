@@ -20,7 +20,7 @@ routerS.post('/login', async (req, res)=>{
       CustomError.createError({
         name: 'User login error',
         cause: 'User does not exist',
-        message: `User does not exist with username + ${email}. Please verify your email or register first if you don't have an account on this site.`,
+        message: `User does not exist with username ${email}. Please verify your email or register first if you don't have an account on this site.`,
         code: EErrors.NOT_FOUND
       })
     }
@@ -48,6 +48,7 @@ routerS.post('/login', async (req, res)=>{
 
 // REGISTER:
 routerS.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
+    
     console.log('New user successfylly created')
     res.status(201).send({status: "success", msg: 'User created successfully created'})
 })

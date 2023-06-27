@@ -25,6 +25,7 @@ login_form.addEventListener('submit', e => {
           console.log(error)
           console.log(error.message)
           alert('Invalid login: ' + error.message)
+          window.location.reload()
         })
       }
     })

@@ -16,6 +16,8 @@ import cookieParser from 'cookie-parser'
 import config from './config/config.js'
 import routerM from './Routes/messages.router.js'
 import routerMocks from './Routes/mock.router.js'
+import { addLogger } from './config/logger_Base.js'
+import MongoSingleton from './config/mongodb-singleton.js'
 
 const app = express()
 const PORT = config.port
@@ -33,6 +35,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(cookieParser('BackendJNME'))
 
+//Helpers for handlebars
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + "/views/")
 app.set('view engine', 'handlebars')
@@ -73,8 +76,14 @@ connectMongoDB()
 
 app.use(express.static(__dirname+'/public'))
 
+//Logger
+app.use(addLogger)
 
+app.get("/logger", (req, res) => {
+    res.send("Testing site for /logger endpoint")
+})
 
+//Socket
 const socketServer = new Server(httpServer)
 
 let messages = []
@@ -87,6 +96,16 @@ socketServer.on('connection', socket => {
 })
 
 
+const mongoInstance = async (req, res) => {
+    try {
+        await MongoSingleton.getInstance();
+    } catch (error) {
+        req.logger.error(error);
+    }
+};
+mongoInstance();
+
+//Routers
 app.use('/', viewRouter)
 app.use('/users', routerU)
 app.use('/api/sessions', routerS)
