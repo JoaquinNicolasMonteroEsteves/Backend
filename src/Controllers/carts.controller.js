@@ -34,7 +34,6 @@ export const deleteAllProductsFromCart = async (req, res) => {
 export const addProductToCart = async (req, res) => {
     let result = await CS.addProductToCart(req.params.cid, req.params.pid)
     res.status(202).send(result)
-
 }
 
 export const purchaseCart = async (req, res) => {

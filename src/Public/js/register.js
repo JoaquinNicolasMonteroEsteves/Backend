@@ -19,5 +19,5 @@ register_form.addEventListener('submit', e => {
         } else {
             alert("User could not be created")
         }
-    }).then (json => console.log(json))
+    })
 })

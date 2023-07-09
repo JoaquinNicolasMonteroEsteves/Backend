@@ -3,12 +3,12 @@ import config from './config.js'
 
 const customLevelOptions = {
     levels: {
-        debug: 0,
-        http: 1,
-        info: 2,
-        warning: 3,
-        error: 4,
-        fatal: 5
+        debug: 5,
+        http: 4,
+        info: 3,
+        warning: 2,
+        error: 1,
+        fatal: 0
     }, 
     colors: {
         debug: 'green',
@@ -26,7 +26,7 @@ const loggerDev = winston.createLogger({
     transports: [
         new winston.transports.Console(
             { 
-                level: "debug",
+                level: "fatal",
                 format: winston.format.combine(
                     winston.format.colorize({colors: customLevelOptions.colors}),
                     winston.format.simple()
@@ -68,6 +68,5 @@ export const addLogger = (req, res, next) => {
     } else {
         req.logger = loggerDev
     }
-    req.logger.info(`${req.method} in ${req.url} - at ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`)
     next()
 }

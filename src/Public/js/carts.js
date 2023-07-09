@@ -50,6 +50,7 @@ const addProductToCart = (cartID, productID, productTitle) => {
             'Content-type': 'application/json'
         }
     }).then((response) => {
+      console.log(response);
         if(response.ok) {
             alert(`1 unit of ${productTitle} was successfully added to the cart`)
         } else {

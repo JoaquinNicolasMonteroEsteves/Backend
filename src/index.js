@@ -20,7 +20,6 @@ import { addLogger } from './config/logger_Base.js'
 import MongoSingleton from './config/mongodb-singleton.js'
 
 const app = express()
-const PORT = config.port
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -49,6 +48,27 @@ hbs.handlebars.registerHelper("isAdmin", function (role, options) {
     return options.inverse(this) 
 })
 
+hbs.handlebars.registerHelper("isNotPremium", function (role, options) {
+    if (role !== "premium") {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
+
+hbs.handlebars.registerHelper("isPremium", function (role, options) {
+    if (role === "premium") {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
+
+hbs.handlebars.registerHelper("isAdminOrPremium", function (role, options) {
+    if (role === "premium" || role === "admin" ) {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
+
 hbs.handlebars.registerHelper("isMoreThanOne", function (quantity, options) {
     if (quantity > 1) {
         return options.fn(this)  
@@ -58,8 +78,8 @@ hbs.handlebars.registerHelper("isMoreThanOne", function (quantity, options) {
 
 
 
-const httpServer = app.listen(PORT, () => {
-	console.log("Servidor escuchando por el puerto: " + PORT);
+const httpServer = app.listen(config.port, () => {
+	console.log("Servidor escuchando por el puerto: " + config.port);
 })
 
 const DB = config.mongoUrl

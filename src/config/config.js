@@ -1,19 +1,23 @@
 import dotenv from 'dotenv';
-// import { Command } from 'commander';
+import { Command } from 'commander';
 
-// const program = new Command();
+const program = new Command();
 
-// program
-//     .option('-d', 'Variable para debug', false)
-//     .option('-p <port>', 'Puerto del servidor', 8080)
-//     .option('--mode <mode>', 'Modo de trabajo', 'develop')
-// program.parse();
+program
+    .option('-d, --debug', 'Variable para debug', false)
+    .option('-p, --port <port>', 'Puerto del servidor', 8080)
+    .option('-m, --mode <mode>', 'Modo de trabajo', 'development')
+program.parse();
 
-// const environment = program.opts().mode 
-dotenv.config();
-// dotenv.config({
-//     path:environment === "production" ? "./src/config/.env.production" : ".src/config/.env.development"
-// });
+// console.log("Options: ", program.opts());
+// console.log("Mode option: ", program.opts().mode);
+// console.log("Remaining arguments: " + program.args);
+
+// dotenv.config();
+dotenv.config({
+    path: program.opts().mode === "production" ? "./src/config/.env.production" : "./src/config/.env.development"
+});
+
 
 export default {
     port: process.env.PORT,
@@ -22,5 +26,5 @@ export default {
     adminPassword: process.env.ADMIN_PASSWORD,
     gmailAccount: process.env.GMAIL_ACCOUNT,
     gmailAppPassword: process.env.GMAIL_APP_PASSWORD,
-    // environment: environment
+    environment: program.opts().mode
 };

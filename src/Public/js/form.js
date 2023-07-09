@@ -5,7 +5,6 @@ product_form.addEventListener('submit', e => {
     let data = new FormData(product_form)
     let obj = {}
     data.forEach((value, key) => obj[key] = value)
-    console.log(obj);
     fetch('/api/products', {
         method: 'POST',
         body: JSON.stringify(obj),

@@ -23,7 +23,6 @@ export default class EmailService {
     sendEmail = async (ticket) => {
         try {
             const mailOptions = {
-                //Cuerpo del mail
                 from: "Coder test " + config.gmailAccount,
                 to: config.gmailAccount,
                 subject: "Products pruchased!",

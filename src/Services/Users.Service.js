@@ -34,5 +34,16 @@ export default class UserSerivce {
         } catch (error) {
           retrun `An error has occurred by updating a user. Error detail: ${error}`
         }
-      }
+    }
+
+    upgradeUser = async (email) => {
+        try {
+          await userModel.findOneAndUpdate({ email: email }, { role: 'premium' })
+          let updatedUser = await userModel.findOne({ email: email })
+          return updatedUser
+        } catch (error) {
+          return `An error has ocurred by consulting user database. Error detail: ${error}`
+        }
+    }
+
 }

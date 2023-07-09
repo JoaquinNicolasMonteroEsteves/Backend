@@ -35,7 +35,12 @@ const productSchema = new mongoose.Schema({
     thumbnail: Array,
     code: numberTypeSchemaUniqueRequired,
     stock: numberTypeSchemaRequired,
-    status: booleanTypeSchemaRequired
+    status: booleanTypeSchemaRequired,
+    owner: {
+      type: String,
+      required: true,
+      default: 'admin'
+    }
 })
 
 productSchema.plugin(paginate)

@@ -66,7 +66,7 @@ viewRouter.get('/carts/:cid', async (req, res) => {
     res.render('cart', result)
 })
 
-viewRouter.get('/products', passportCall('login'), authorization(['user', 'admin']), async (req, res) => {
+viewRouter.get('/products', passportCall('login'), authorization(['user','premium', 'admin']), async (req, res) => {
     let products = await PS.getProducts(req.query)
     let link_filter = readLinkFilter(req.query)
     
@@ -92,7 +92,7 @@ viewRouter.get('/api/cart/:cid/purchase', async (req, res) => {
     
 })
 
-viewRouter.get('/current', passportCall('login'), authorization(['user', 'admin']), async (req, res) => {
+viewRouter.get('/current', passportCall('login'), authorization(['user', 'premium', 'admin']), async (req, res) => {
     let data = {
         user: req.user,
         isAdmin: req.user.role === "admin" ? true : false,
