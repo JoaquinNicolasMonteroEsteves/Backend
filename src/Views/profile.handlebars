@@ -10,6 +10,9 @@
         <ul class="menu">
             {{#if user}}
                 <li id="li_logout"><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium;">Logout</a></button></form></li>
+                {{#isNotPremium user.role}}
+                    <li><a><button onclick="upgradeUser('{{user.email}}')">Hacerse Premium</button></a></li>
+                {{/isNotPremium}}
             {{else}}
                 <li><a href="/users/login">Login</a></li>
                 <li><a href="/users/register">Register</a></li>
@@ -25,6 +28,11 @@
         <div class="personal_info_div_ch"><h4>Age:&nbsp</h4><p>{{user.age}}</p></div>
         <div class="personal_info_div_ch"><h4>Role:&nbsp</h4><p>{{user.role}}</p></div>
     </ul>
+    {{#isAdmin user.role}}
+    {{else}}
+    </br><p>If you want to change you password, you can do it by clicking <a><button class="btnPass" onclick="restore('{{user.email}}')">here</button></a>.</p>
+    {{/isAdmin}}
+    </br>
     {{else}}
         <h1>There is no session detected</h1>
     {{/if}}
@@ -61,3 +69,4 @@
 
 <script src="/js/logout.js"></script>
 <script src="/js/carts.js"></script>
+<script src="/js/users.js"></script>

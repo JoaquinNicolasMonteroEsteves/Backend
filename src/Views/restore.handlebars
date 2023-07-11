@@ -1,0 +1,31 @@
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            {{#if user}}
+                <li id="li_logout"><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium;">Logout</a></button></form></li>
+                {{#isNotPremium user.role}}
+                    <li><a><button onclick="upgradeUser('{{user.email}}')">Hacerse Premium</button></a></li>
+                {{/isNotPremium}}
+            {{/if}}
+                <li><a href="/products">Products</a></li>
+        </ul>
+    </section>
+    <h2>Welcome {{user.name}}</h2>
+    <h3>Restore you password</h3>
+    <form id="restore-pass-form">
+                    <label>New password:</label>
+                    <input name="pass" placeholder="Enter your new password" autofocus/><br/>
+                    <label>Repeat new password:</label>
+                    <input name="repeat-pass" placeholder="Repeat your new password"/><br/>
+                    <input name="user" value="{{user.email}}" style="display: none;"/>
+                <input type='submit' />
+            </form>
+
+</div>

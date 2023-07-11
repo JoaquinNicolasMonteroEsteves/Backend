@@ -19,7 +19,7 @@
     padding: 0;
   }
 
-  .menu button {
+  .menu button, .btnPass {
     all: unset;
   }
   

@@ -49,7 +49,7 @@ hbs.handlebars.registerHelper("isAdmin", function (role, options) {
 })
 
 hbs.handlebars.registerHelper("isNotPremium", function (role, options) {
-    if (role !== "premium") {
+    if (role !== "premium" && role !== "admin") {
         return options.fn(this)  
     } 
     return options.inverse(this) 
@@ -76,6 +76,12 @@ hbs.handlebars.registerHelper("isMoreThanOne", function (quantity, options) {
     return options.inverse(this) 
 })
 
+hbs.handlebars.registerHelper("isOwner", function (userEmail, pOwner, options) {
+    if (userEmail == pOwner) {
+        return options.fn(this)  
+    } 
+    return options.inverse(this) 
+})
 
 
 const httpServer = app.listen(config.port, () => {

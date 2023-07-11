@@ -23,7 +23,7 @@ export default class CartService {
     addProductToCart = async (cartId, productId) => {
         try 
     {
-            let cart = await cartModel.findOne({_id: cartIdd})
+            let cart = await cartModel.findOne({_id: cartId})
             let product = await productModel.findOne({_id: productId})
             let productInCart = cart.products.find(p => p.product._id == productId)??null
             if(!productInCart) {

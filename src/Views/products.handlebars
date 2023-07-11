@@ -18,7 +18,6 @@
                 <li><a href="/users/login">Login</a></li>
                 <li><a href="/users/register">Register</a></li>
             {{/if}}
-            
         </ul>
     </section>
     <div>
@@ -40,7 +39,11 @@
                     {{#isAdmin ../user.role}}
                     <h3><a>Editar productos</a></h3>
                     {{else}}
-                    <button class="btn" type='submit' onclick="addProductToCart('{{../user.cart_id}}', '{{this._id}}', '{{this.title}}')"> + CART </button>
+                    <button class="btn" type='submit' 
+                        {{#isOwner ../user.email this.owner}}
+                            style="display: none;"
+                        {{/isOwner}}
+                        onclick="addProductToCart('{{../user.cart_id}}', '{{this._id}}', '{{this.title}}')"> + CART </button>
                     {{/isAdmin}}
                 </div>
             {{/each}}

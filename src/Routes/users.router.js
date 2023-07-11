@@ -1,7 +1,8 @@
 import {Router} from 'express';
 import { authorization, passportCall } from '../utils.js';
 import { authJWToken } from '../utils.js';
-import { upgradeUser } from '../Controllers/users.controller.js';
+import { restorePass, upgradeUser } from '../Controllers/users.controller.js';
+import { sendRestoreLink } from '../Controllers/email.controller.js';
 const routerU = Router();
 
 routerU.get('/', passportCall('login'), authorization(['admin','premium','user']), (req, res) => {
@@ -27,5 +28,9 @@ routerU.get('/error', (req, res) => {
 })
 
 routerU.post('/premium/:umail', upgradeUser)
+
+routerU.post('/restore/:umail', sendRestoreLink)
+
+routerU.post('/restore/new/', restorePass)
 
 export default routerU;

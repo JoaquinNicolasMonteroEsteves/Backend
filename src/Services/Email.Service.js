@@ -24,7 +24,7 @@ export default class EmailService {
         try {
             const mailOptions = {
                 from: "Coder test " + config.gmailAccount,
-                to: config.gmailAccount,
+                to: ticket.purchaser,
                 subject: "Products pruchased!",
                 html: `<div>
                         <h1>Your products where successfully pruchased and here is your ticket detail:</h1>
@@ -37,11 +37,11 @@ export default class EmailService {
             }
 
             let Failed = false
-            let Text = `and sended to ${config.gmailAccount}`
+            let Text = `and sended to ${ticket.purchaser}`
             let mailing = {mailingFailed: Failed, mailingText: Text}
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    Text = `The purchase was successfull but couldn't be sent an email to: ${config.gmailAccount}`
+                    Text = `The purchase was successfull but couldn't be sent an email to: ${ticket.purchaser}`
                     Failed = true
                 }
             })
@@ -51,37 +51,65 @@ export default class EmailService {
         }
     }
     
-    sendEmailWithAttachments = async (ticketID) => {
-        try {
-            let ticket = await ticketModel.findOne({_id: ticketID})
-            const mailOptionsWithAttachments = {
-                //Cuerpo del mail
-                from: "Coder test " + config.gmailAccount,
-                to: config.gmailAccount,
-                subject: "Testing mailing from Backend Application with attachments",
-                html: `<div>
-                        <h1>This is a test of mailing using Nodemailer library with attachments</h1>
-                        <p>This is the attachment:</p>
-                        <img src="cid:meme" />
-                       </div>`,
-                attachments: [
-                    {
-                        filename: 'Bird meme',
-                        path: __dirname + '/public/images/birdMeme.jpeg',
-                        cid: "meme"
-                    }
-                ]
-            }
+    // sendEmailWithAttachments = async (ticketID) => {
+    //     try {
+    //         let ticket = await ticketModel.findOne({_id: ticketID})
+    //         const mailOptionsWithAttachments = {
+    //             //Cuerpo del mail
+    //             from: "Coder test " + config.gmailAccount,
+    //             to: config.gmailAccount,
+    //             subject: "Testing mailing from Backend Application with attachments",
+    //             html: `<div>
+    //                     <h1>This is a test of mailing using Nodemailer library with attachments</h1>
+    //                     <p>This is the attachment:</p>
+    //                     <img src="cid:meme" />
+    //                    </div>`,
+    //             attachments: [
+    //                 {
+    //                     filename: 'Bird meme',
+    //                     path: __dirname + '/public/images/birdMeme.jpeg',
+    //                     cid: "meme"
+    //                 }
+    //             ]
+    //         }
 
-            transporter.sendEmail(mailOptionsWithAttachments, (error, info) => {
-                if (error) {
-                    res.status(400).send({ msg: "Error in attached mailing service", payload: error })
-                }
-                console.log('Message sent: ', info.messageId);
-                res.send({ msg:"Success", payload: info })
-            })
+    //         transporter.sendEmail(mailOptionsWithAttachments, (error, info) => {
+    //             if (error) {
+    //                 res.status(400).send({ msg: "Error in attached mailing service", payload: error })
+    //             }
+    //             console.log('Message sent: ', info.messageId);
+    //             res.send({ msg:"Success", payload: info })
+    //         })
+    //     } catch (error) {
+    //         return `An error occurred while trying to sending the email. Detail: ${error}`
+    //     }
+    // }
+
+    sendRestoreLink = async (email) => {
+        try {
+          const mailOptions = {
+            from: 'Coder TEST' + config.gmailAccount,
+            to: email,
+            subject: 'Restablecimiento de contraseña - PROYECTO BACKEND NP!',
+            html:
+              `<div>
+                <h1> Pedido de restablecimiento de contraseña para ${email} </h1>
+                <p> El siguiente link lo llevará a un sitio donde deberá introducir la nueva contraseña de su cuenta: </p>
+                <a href="http://localhost:8080/restore/password"> Restablecer contraseña </a>
+                <p> Si usted no solicitó esta acción, ignore este mensaje.</p>
+              </div>`,
+          }
+
+        let Failed = false
+        let Text = `and sended to ${config.gmailAccount}`
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                Text = `The purchase was successfull but couldn't be sent an email to: ${config.gmailAccount}`
+                Failed = true
+            }
+        })
         } catch (error) {
-            return `An error occurred while trying to sending the email. Detail: ${error}`
+          return { message: 'Email could not be sent to: ' + data.email, detail: error }
         }
-    }
+      }    
 }

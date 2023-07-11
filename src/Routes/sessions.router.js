@@ -49,7 +49,6 @@ routerS.post('/login', async (req, res)=>{
 // REGISTER:
 routerS.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
     
-    console.log('New user successfylly created')
     res.status(201).send({status: "success", msg: 'User created successfully created'})
 })
 

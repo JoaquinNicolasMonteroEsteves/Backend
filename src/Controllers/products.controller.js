@@ -22,7 +22,6 @@ let PS = new ProductService()
 
 export const addProduct = async (req, res) => {
     try {
-      console.log(req.body);
         let product = req.body
         if (!product.title || !product.category || !product.description || !product.price  || !product.code || !product.stock || !product.status ) {
           CustomError.createError({

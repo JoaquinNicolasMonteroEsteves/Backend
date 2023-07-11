@@ -73,9 +73,10 @@ viewRouter.get('/products', passportCall('login'), authorization(['user','premiu
     products.prevLink = products.hasPrevPage? `http://localhost:8080/products?${link_filter}page=${products.prevPage}`:'None'
     products.nextLink = products.hasNextPage? `http://localhost:8080/products?${link_filter}page=${products.nextPage}`:'None'
     products.status = products ? "success" : "error"
-    
+
+
     // products.docs.forEach(p => {
-    //     if(p.stock == 0) {
+    //     if(p.stock === 0) {
     //         products.docs.splice(products.docs.indexOf(p), 1)
     //     }
     // })
@@ -100,6 +101,12 @@ viewRouter.get('/current', passportCall('login'), authorization(['user', 'premiu
     }
     
     res.render('profile', data)
+})
+
+
+viewRouter.post('/restore/password', passportCall('login'), authorization(['admin','premium','user']), (req, res) => {
+    let data = {user: req.user}
+    res.render("restore", data)
 })
 
 viewRouter.get('/realtimeproducts', async (req, res) => {
