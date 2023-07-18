@@ -1,0 +1,55 @@
+# Product
+components:
+  schemas:
+    Product:
+      type: object
+      required: 
+        - id
+        - title
+        - category
+        - description
+        - price
+        - thumbnail
+        - code
+        - stock
+        - owner
+        - status
+      properties:
+        id: 
+          type: string
+          description: The auto-generated id of the product.
+        title:
+          type: string
+          description: Name of the product.
+        description:
+          type: string
+          description: Details of the product.
+        price: 
+          type: number
+          descriprion: Value of the product.
+        thumbnail:
+          type: string
+          description: Picture of the product.
+        code: 
+          type: number
+          description: Code of the product.
+        stock: 
+          type: number
+          description: Available quantity of the product.
+        owner:
+          type: string
+          description: Product creator.
+        status:
+          type: boolean
+          description: Status of the product.
+      example:
+        id: 1uim4a78d28a99awrg2hjjuyy556
+        title: Crónica de una muerte anunciada
+        category: Novela
+        description: 'Un pueblo espectante de una muerte vaticinada por sus futuros autores.'
+        price: 4200
+        thumbnail: url de imagen
+        code: 120
+        stock: 69
+        owner: lucio.nestor@gmail.com
+        status: true

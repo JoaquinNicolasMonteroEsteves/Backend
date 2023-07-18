@@ -1,0 +1,17 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Get a cart with given id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Path parameter takes the cart id.
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Cart was found.
+        "404":
+          description: Cart not found Error.

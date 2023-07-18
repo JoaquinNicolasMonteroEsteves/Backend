@@ -1,0 +1,18 @@
+# Cart
+components:
+  requestBodies:
+    NewCart:
+      type: object
+      required: 
+        - id
+        - products
+      properties:
+        id: 
+          type: string
+          description: The auto-generated id of the cart.
+        products:
+          type: array
+          description: Empty cart with no products.
+      example:
+        id: 9uim4a78d284f6dgf1ghyh1y4
+        products: []

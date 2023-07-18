@@ -31,6 +31,6 @@ routerU.post('/premium/:umail', upgradeUser)
 
 routerU.post('/restore/:umail', sendRestoreLink)
 
-routerU.post('/restore/new/', restorePass)
+routerU.put('/restore/new', restorePass)
 
 export default routerU;

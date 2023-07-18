@@ -1,0 +1,20 @@
+paths:
+  /api/carts/{cid}/products/{pid}:
+    delete:
+      summary: Delete product from cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Path parameter takes the cart id.
+          required: true
+          type: string
+        - name: pid
+          in: path
+          description: Path parameter takes the product id.
+          required: true
+          type: string
+      responses:
+        "201":
+          description: The product was successfully deleted from the cart.

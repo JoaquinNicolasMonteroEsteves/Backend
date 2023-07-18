@@ -1,0 +1,17 @@
+paths:
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Purchase all items in cart.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Path parameter takes the cart id.
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Cart was successfully purchased and sends email with ticket.
+        "404":
+          description: Cart was not founds.

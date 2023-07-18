@@ -17,15 +17,18 @@
                 <li><a href="/products">Products</a></li>
         </ul>
     </section>
-    <h2>Welcome {{user.name}}</h2>
+    <h2>Welcome {{user.name}}</h2></br>
     <h3>Restore you password</h3>
     <form id="restore-pass-form">
                     <label>New password:</label>
                     <input name="pass" placeholder="Enter your new password" autofocus/><br/>
                     <label>Repeat new password:</label>
-                    <input name="repeat-pass" placeholder="Repeat your new password"/><br/>
-                    <input name="user" value="{{user.email}}" style="display: none;"/>
+                    <input name="repeatPass" placeholder="Repeat your new password"/><br/>
+                    <input name="user" style="display: none;"/>
                 <input type='submit' />
             </form>
 
 </div>
+
+
+<script src="/js/restore.js"></script>

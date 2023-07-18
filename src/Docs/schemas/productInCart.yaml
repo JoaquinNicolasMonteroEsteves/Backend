@@ -1,0 +1,23 @@
+# Product in cart
+components:
+  schemas: 
+    ProductInCart:
+      type: object
+      required:
+        - id
+        - product
+        - quantity
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of item in the cart.
+        product:
+          type: string
+          description: The auto-generated id of the product in products database.
+        quantity:
+          type: number
+          description: Amount of the product inside cart.
+      example:
+        id: hisadnsnfowgoerguegn,
+        product: skfndongvoer46491,
+        quantity: 4

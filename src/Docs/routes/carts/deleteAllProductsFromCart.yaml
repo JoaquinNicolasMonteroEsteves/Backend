@@ -1,0 +1,15 @@
+paths:
+  /api/carts/{cid}:
+    delete:
+      summary: Delete all products from cart.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Path parameter takes the cart id.
+          required: true
+          type: string
+      responses:
+        "201":
+          description: All products from cart have been deleted.

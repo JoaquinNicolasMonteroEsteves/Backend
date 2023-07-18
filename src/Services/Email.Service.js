@@ -85,7 +85,7 @@ export default class EmailService {
     //     }
     // }
 
-    sendRestoreLink = async (email) => {
+    sendRestoreLink = async (email, link) => {
         try {
           const mailOptions = {
             from: 'Coder TEST' + config.gmailAccount,
@@ -95,7 +95,7 @@ export default class EmailService {
               `<div>
                 <h1> Pedido de restablecimiento de contraseña para ${email} </h1>
                 <p> El siguiente link lo llevará a un sitio donde deberá introducir la nueva contraseña de su cuenta: </p>
-                <a href="http://localhost:8080/restore/password"> Restablecer contraseña </a>
+                <a href='${link}'> Restablecer contraseña </a>
                 <p> Si usted no solicitó esta acción, ignore este mensaje.</p>
               </div>`,
           }

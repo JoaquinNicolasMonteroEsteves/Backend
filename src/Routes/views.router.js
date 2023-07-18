@@ -89,9 +89,6 @@ viewRouter.get('/products', passportCall('login'), authorization(['user','premiu
     res.render('products', data)
 })
 
-viewRouter.get('/api/cart/:cid/purchase', async (req, res) => {
-    
-})
 
 viewRouter.get('/current', passportCall('login'), authorization(['user', 'premium', 'admin']), async (req, res) => {
     let data = {
@@ -104,7 +101,7 @@ viewRouter.get('/current', passportCall('login'), authorization(['user', 'premiu
 })
 
 
-viewRouter.post('/restore/password', passportCall('login'), authorization(['admin','premium','user']), (req, res) => {
+viewRouter.get('/restore/password', passportCall('login'), authorization(['admin','premium','user']), (req, res) => {
     let data = {user: req.user}
     res.render("restore", data)
 })

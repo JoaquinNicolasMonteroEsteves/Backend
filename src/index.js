@@ -18,8 +18,25 @@ import routerM from './Routes/messages.router.js'
 import routerMocks from './Routes/mock.router.js'
 import { addLogger } from './config/logger_Base.js'
 import MongoSingleton from './config/mongodb-singleton.js'
+import swaggerUIExpress from 'swagger-ui-express'
+import swaggerJsdoc from 'swagger-jsdoc'
 
 const app = express()
+
+// Swagger Configuration:
+const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'API Documentation - Proyecto Backend',
+        description: 'API Documentation for Proyecto Backend - Swagger'
+      }
+    },
+    apis: [`./src/Docs/**/*.yaml`]
+  }
+  
+const specs = swaggerJsdoc(swaggerOptions)
+app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs))
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
