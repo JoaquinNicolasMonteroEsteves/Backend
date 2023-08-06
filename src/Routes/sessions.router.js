@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { generateJWToken, is_valid_password } from "../utils.js";
+import { generateJWToken, hourTime, is_valid_password } from "../utils.js";
 import passport from "passport";
 import UserSerivce from "../Services/Users.Service.js";
 import userDTO from "../Services/DTO/users.dto.js";
 import EErrors from '../Services/Errors/error-enum.js'
 import CustomError from '../Services/Errors/customError.js'
+import userModel from "../Services/models/user.model.js";
 
 const routerS = Router()
 let US = new UserSerivce()
@@ -14,9 +15,8 @@ routerS.post('/login', async (req, res)=>{
   const {email, password} = req.body
   try {
     const user = await US.getUser({ email: email })
+    //Chequeo la existencia del usuario
     if (!user) {
-      // console.warn('User does not exist with username: ' + email)
-      // return res.status(401).send({ status: 'Not found', message: 'User does not exist with username: ' + email })
       CustomError.createError({
         name: 'User login error',
         cause: 'User does not exist',
@@ -24,9 +24,8 @@ routerS.post('/login', async (req, res)=>{
         code: EErrors.NOT_FOUND
       })
     }
+    //Si el usuario existe, chequeo que esté bien la combinación email/contraseña
     if (!is_valid_password(user, password)) {
-      // console.warn('Invalid credentials for user: ' + email)
-      // return res.status(401).send({ status: 'error', message: 'User and password do not match!' })
       CustomError.createError({
         name: 'User login error',
         cause: 'Invalid credentials',
@@ -34,10 +33,17 @@ routerS.post('/login', async (req, res)=>{
         code: EErrors.INVALID_CREDENTIALS
       })
     }
+    //En caso de ser correcta, se genera el token con el DTO
     const tokenUser = new userDTO(user)
-    const access_token = generateJWToken(tokenUser)
-    res.cookie('jwtCookieToken', access_token, { maxAge: 600000, httpOnly: true }) // 10 min
-    res.send({message: 'Login successful!', jwt: access_token })
+    const access_token = generateJWToken(tokenUser)    
+
+    //Actualizo la última conexión
+    let time = hourTime()
+    await userModel.findOneAndUpdate({email: email}, {last_connection: time })
+
+    //Respondo con la cookie y su duración
+    res.cookie('jwtCookieToken', access_token, { maxAge: 1800000, httpOnly: true }) // 30 min
+    res.status(201).send({status: "success", message: 'Login successful!', jwt: access_token })
   } catch (error) {
     console.error(error)
     // return res.status(500).send({ status:'error', error:'Internal application error'})
@@ -48,7 +54,6 @@ routerS.post('/login', async (req, res)=>{
 
 // REGISTER:
 routerS.post('/register', passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
-    
     res.status(201).send({status: "success", msg: 'User created successfully created'})
 })
 

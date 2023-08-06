@@ -10,7 +10,7 @@ export default class MongoSingleton {
 
     static getInstance(){
         if (this.#instance) {
-            console.log("Ya se ha abierto una conexion a MongoDB.");
+            console.log("Ya se ha abierto una conexión a MongoDB.");
         } else {
             this.#instance = new MongoSingleton();
         }

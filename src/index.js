@@ -9,7 +9,6 @@ import handlebars from 'express-handlebars'
 import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
 import session from 'express-session'
-import mongoose from 'mongoose'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
@@ -105,17 +104,17 @@ const httpServer = app.listen(config.port, () => {
 	console.log("Servidor escuchando por el puerto: " + config.port);
 })
 
-const DB = config.mongoUrl
-const connectMongoDB = async () => {
-    try {
-        await mongoose.connect(DB)
-        console.log("Connecting using MongoDB")
-    }
-    catch (error){
-        process.exit()
-    }
-}
-connectMongoDB()
+// const DB = config.mongoUrl
+// const connectMongoDB = async () => {
+//     try {
+//         await mongoose.connect(DB)
+//         console.log("Connecting using MongoDB")
+//     }
+//     catch (error){
+//         process.exit()
+//     }
+// }
+// connectMongoDB()
 
 app.use(express.static(__dirname+'/public'))
 
@@ -138,7 +137,7 @@ socketServer.on('connection', socket => {
     
 })
 
-
+//Conexión a la BD
 const mongoInstance = async (req, res) => {
     try {
         await MongoSingleton.getInstance();

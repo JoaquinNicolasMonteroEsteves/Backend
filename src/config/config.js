@@ -9,13 +9,10 @@ program
     .option('-m, --mode <mode>', 'Modo de trabajo', 'development')
 program.parse();
 
-// console.log("Options: ", program.opts());
-// console.log("Mode option: ", program.opts().mode);
-// console.log("Remaining arguments: " + program.args);
+export const environment = program.opts().mode
 
-// dotenv.config();
 dotenv.config({
-    path: program.opts().mode === "production" ? "./src/config/.env.production" : "./src/config/.env.development"
+    path: environment === "production" ? "./src/config/.env.production" : program.opts().mode === "testing" ? "./src/config/.env.testing" : "./src/config/.env.development"
 });
 
 
@@ -26,5 +23,5 @@ export default {
     adminPassword: process.env.ADMIN_PASSWORD,
     gmailAccount: process.env.GMAIL_ACCOUNT,
     gmailAppPassword: process.env.GMAIL_APP_PASSWORD,
-    environment: program.opts().mode
+    environment: environment
 };

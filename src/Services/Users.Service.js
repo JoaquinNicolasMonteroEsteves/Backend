@@ -42,7 +42,7 @@ export default class UserSerivce {
           let updatedUser = await userModel.findOne({ email: email })
           return updatedUser
         } catch (error) {
-          return `An error has ocurred by consulting user database. Error detail: ${error}`
+          return `An error has ocurred while consulting user database. Error detail: ${error}`
         }
     }
 
@@ -56,4 +56,15 @@ export default class UserSerivce {
         }
     }
 
+    uploadDocs = async (files, email) => {
+        try {
+            await userModel.findOneAndUpdate({email: email}, {
+                documents: files,
+                status: 1
+            })
+            return true
+        } catch (error) {
+            return `An error has ocurred when trying to upload document information. Error detail: ${error}`
+        }
+    }
 }

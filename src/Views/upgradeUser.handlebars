@@ -1,0 +1,43 @@
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            {{#if user}}
+                <li><button type="submit" onclick="logout('{{user.email}}')">Logout</button></li>
+                <li><a href="/current">Profile</a></li>
+            {{else}}
+                <li><a href="/users/login">Login</a></li>
+                <li><a href="/users/register">Register</a></li>
+            {{/if}}
+                <li><a href="/products">Products</a></li>
+        </ul>
+    </section>
+    {{#if user}}
+    <h2>Personal information:</h2>
+    <ul class="personal_info_div">
+        <div class="personal_info_div_ch"><h4>Name:&nbsp</h4><p>{{user.name}}</p></div>
+        <div class="personal_info_div_ch"><h4>Role:&nbsp</h4><p>{{user.role}}</p></div>
+    </ul>
+    <div>
+        <h3>You need to upload the next documents in order to process your upgrade your account:</h3>
+        <form id="uploadDocs-form" name="{{user.email}}" enctype="multipart/form-data" method="post">
+            <label>- Identity document</label><br/>
+            <input required="true" type="file" name="docu_identity_doc" id="identity_doc"><br/><br/>
+            <label>- Proof of Domicile:</label><br/>
+            <input required="true" type="file" name="docu_domicile_doc" id="domicile_doc"><br/><br/>
+            <label>- Proof of account status:</label><br/>
+            <input required="true" type="file" name="docu_status_doc" id="status_doc"><br/><br/>
+            <input type="submit" /> 
+        </form>
+    </div>
+    {{/if}}
+</div>
+
+<script src="/js/uploadDocAndUpgrade.js"></script>
+<script src="/js/logout.js"></script>

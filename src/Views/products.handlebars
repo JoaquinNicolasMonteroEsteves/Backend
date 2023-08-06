@@ -9,8 +9,8 @@
         </label>
         <ul class="menu">
             {{#if user}}
-                <li><a href="/current">Profile</a></li>
-                <li><form style="height: 100%; width: 100%;" id="logoutForm"><button style="background: none; border: none; height: 100%; width: 100%;" type="submit"><a style="font-size: medium; cursor: pointer;">Logout</a></button></form></li>
+                <li><a href="/users">Profile</a></li>
+                <li><button type="submit" onclick="logout('{{user.email}}')">Logout</button></li>
                 {{#isNotPremium user.role}}
                     <li><a><button onclick="upgradeUser('{{user.email}}')">Hacerse Premium</button></a></li>
                 {{/isNotPremium}}

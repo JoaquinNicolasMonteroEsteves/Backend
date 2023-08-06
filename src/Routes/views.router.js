@@ -1,12 +1,16 @@
 import { Router } from 'express'
 import ProductService from '../Services/Product.Service.js'
 import CartService from '../Services/Cart.Service.js'
+import UserSerivce from '../Services/Users.Service.js'
 import cookieParser from 'cookie-parser'
-import { authorization, passportCall, readLinkFilter } from '../utils.js'
+import { authorization, hourTime, passportCall, readLinkFilter } from '../utils.js'
+import { environment } from '../config/config.js'
+import userModel from '../Services/models/user.model.js'
 
 const viewRouter = Router()
 let PS = new ProductService()
 let CS = new CartService()
+let US = new UserSerivce()
 
 // Habilitación de las cookies
 viewRouter.use(cookieParser("JM%&/123"))
@@ -37,28 +41,11 @@ viewRouter.get('/session', (req, res) => {
 })
 
 
-//Loggin
-viewRouter.get('/logout', (req, res) => {
-    res.clearCookie("jwtCookieToken").status(200).send()
-})
-
-//Autenticación
-function auth(req, res, next) {
-    if (req.session.user === 'pepe' && req.session.admin){
-        return next()
-    }
-    else {
-        return res.status(403)
-    }
-}
-
-viewRouter.get('/private', auth, (req, res) => {
-    res.send("If you are seeing this is because you are Pepe!")
-})
-
-viewRouter.get('/', async (req, res) =>{
-    let products = await PS.getProducts()
-    res.render('home', {products})
+//Logout
+viewRouter.get('/logout/:umail', async (req, res) => {
+    let time = hourTime()
+    await userModel.findOneAndUpdate({email: req.params.umail}, {last_connection: time })
+    res.clearCookie("jwtCookieToken").status(201).send({status: "success", message: 'Logout successful!'})
 })
 
 viewRouter.get('/carts/:cid', async (req, res) => {
@@ -80,13 +67,17 @@ viewRouter.get('/products', passportCall('login'), authorization(['user','premiu
     //         products.docs.splice(products.docs.indexOf(p), 1)
     //     }
     // })
-
+    let user = await US.getUser({email: req.user.email})
+    req.user.role = user.role
     let data = {
         products: products,
         user: req.user
     }
-    
-    res.render('products', data)
+    if (environment === "testing") {
+        res.status(201).send({status: "success", msg: 'Products were succesfully displayed', user: data.user})
+    } else {
+        res.render('products', data)
+    }
 })
 
 
@@ -100,6 +91,10 @@ viewRouter.get('/current', passportCall('login'), authorization(['user', 'premiu
     res.render('profile', data)
 })
 
+viewRouter.get('/premium', passportCall('login'), authorization(['user']), (req, res) => {
+    let data = { user: req.user }
+    res.render("upgradeUser", data)
+})
 
 viewRouter.get('/restore/password', passportCall('login'), authorization(['admin','premium','user']), (req, res) => {
     let data = {user: req.user}

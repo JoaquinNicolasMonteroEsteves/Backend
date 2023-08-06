@@ -13,7 +13,26 @@ export const upgradeUser = async (req, res) => {
     let update = await US.upgradeUser(email)
     res.status(201).send(update)
   } catch (error) {
-    res.send({ status: 'Error', message: `User could not be upgrated! Detail: %${error}`})
+    res.send({ status: 'Error', message: `User could not be upgrated! Detail: ${error}`})
+  }
+}
+
+export const uploadDocs = async (req, res) => {
+  try {
+    let files = []
+    req.files.forEach(f => {
+        let docu = {
+            name: f.originalname,
+            reference: f.path
+        }
+        files.push(docu)
+    })
+    let upload = await US.uploadDocs(files, req.params.umail)
+    if(upload) {
+      res.status(201).send(upload)
+    }
+  } catch (error) {
+    res.send({ status: 'Error', message: `Documents information couldn't be updated! Detail: ${error}`})
   }
 }
 

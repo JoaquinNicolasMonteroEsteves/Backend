@@ -18,7 +18,7 @@ login_form.addEventListener('submit', e => {
           localStorage.setItem('authToken', json.access_token)
           localStorage.setItem('USER_ID', json.id)
           alert('Successfull login!')
-          window.location.replace('/current')
+          window.location.replace('/users')
         })
       } else {
         return result.json().then((error) => {
