@@ -41,11 +41,14 @@ routerS.post('/login', async (req, res)=>{
     let time = hourTime()
     await userModel.findOneAndUpdate({email: email}, {last_connection: time })
 
+    //Muestro en consola el login exitoso
+    req.logger.info("\nLogin successfull for: \n"+user.email)
+
     //Respondo con la cookie y su duración
     res.cookie('jwtCookieToken', access_token, { maxAge: 1800000, httpOnly: true }) // 30 min
     res.status(201).send({status: "success", message: 'Login successful!', jwt: access_token })
   } catch (error) {
-    console.error(error)
+    req.logger.error(error.cause)
     // return res.status(500).send({ status:'error', error:'Internal application error'})
     res.status(400).json({ status: 'Error', message: error.message })
   }

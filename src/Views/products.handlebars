@@ -9,7 +9,7 @@
         </label>
         <ul class="menu">
             {{#if user}}
-                <li><a href="/users">Profile</a></li>
+                <li><a href="/users/profile">Profile</a></li>
                 <li><button type="submit" onclick="logout('{{user.email}}')">Logout</button></li>
                 {{#isNotPremium user.role}}
                     <li><a><button onclick="upgradeUser('{{user.email}}')">Hacerse Premium</button></a></li>

@@ -79,6 +79,16 @@ export const hourTime = () => {
   return hourTime
 }
 
+//Obtención de la diferencia entre dos tiempos
+export const getDiffTime = (lastConnection, nowTime) => {
+  let msPerHour = 1000 * 60 * 60;
+  
+  // Discard the time and time-zone information.
+  let utc1 = Date.parse(lastConnection);
+  let utc2 = Date.parse(nowTime);
+
+  return ((utc2 - utc1) / msPerHour).toFixed(1);
+}
 
 // Generación del Hash
 export const create_hash = password =>  bcrypt.hashSync(password, bcrypt.genSaltSync(10))

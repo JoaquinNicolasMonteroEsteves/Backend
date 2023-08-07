@@ -7,6 +7,33 @@ import EErrors from "../Services/Errors/error-enum.js"
 
 const US = new UserSerivce()
 
+export const getUsers = async (req, res) => {
+  try {
+    let users = await US.getUsers()
+    console.log("\n>>> Users found <<<\n")
+    users.forEach((x,i) => {
+      console.log(">> User " + (i+1))
+      console.log(x)
+    })
+  } catch (error) {
+    res.send({ status: 'Error', message: `Users couldn't be listed! Detail: ${error}`})
+  }
+}
+
+export const getAndDeleteIdleUsers = async (req, res, next) => {
+  try {
+    let idleUsers = await US.getIdleUsers()
+    if(idleUsers.length < 1) {
+      res.status(201).send({status: "success", msg: "No user has been idle for two o more days!"})  
+    } else {
+      await US.deleteIdleUsers(idleUsers)
+      next()
+    }
+  } catch (error) {
+    res.send({ status: 'Error', message: `Idle users couldn't be obtained! Detail: ${error}`})
+  }
+}
+
 export const upgradeUser = async (req, res) => {
   try {
     let email = req.params.umail
@@ -77,13 +104,6 @@ export const restorePass = async (req, res) => {
     catch(error) {
       res.status(400).json({status: 'Error', message: error.message, detail: error.cause})
     }
-
-    // if(result.status == 503) {
-    //   res.status(503).json()
-    // }
-    
-    // res.status(201).json(result)
-  
   }
   catch (error) {
     res.status(500).json({ status: 'Error', message: `Password couldn't be changed! Detail: %${error}`})

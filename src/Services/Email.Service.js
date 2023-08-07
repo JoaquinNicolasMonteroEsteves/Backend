@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
 import config from '../config/config.js'
 import { __dirname } from '../utils.js'
-import ticketModel from './models/ticket.model.js'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -49,6 +48,40 @@ export default class EmailService {
         } catch (error) {
             return `An error occurred while trying to sending the email. Detail: ${error}`
         }
+    }
+
+    sendDeletedEmail = async (users) => {
+      try {
+        let mailing = []
+        users.forEach((u,i) => {
+          const mailOptions = {
+              from: "Coder test " + config.gmailAccount,
+              to: u.email,
+              subject: "Account deleted",
+              html: `<div>
+                      <h2>Your has been deleted</h2>
+                      <p>
+                        Dear user (or ex), we are sorry to inform you that your account has been deleted due to inactivity (2 days or more, 
+                        we have not so much patience).\n
+                        Hope to see you soon again!
+                      </p>
+                    </div>`,
+              attachments: []
+          }
+          
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+             return `An error ocurred while trying to send an email. ${i} out of a total of ${users.length} were sent. \n
+             Users: ${users} \n
+             Detail: ${error}`
+            }
+          })
+          mailing.push(u.email)
+        })
+        return mailing
+      } catch (error) {
+          return `An error occurred while trying to sending the email. Detail: ${error}`
+      }
     }
     
     // sendEmailWithAttachments = async (ticketID) => {
