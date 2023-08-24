@@ -28,7 +28,19 @@ export const sendDeletedEmail = async (req, res) => {
     } catch (error) {
         res.send({ status: 'Error', message: `Account from the users were successfully deleted, but couldn't sent emails! Detail: ${error}`})
     }
-    
+}
+
+export const sendProductDeletedEmail = async (req, res) => {
+    try {
+        let result = await ES.sendProductDeletedEmail(req.params.umail, req.params.pname) 
+        if(typeof(result) == "object") {
+            res.status(201).send("Product deleted and email sent to " + result.user)
+        } else {
+            res.status(404).send(result)
+        }
+    } catch (error) {
+        res.send({ status: 'Error', message: `Account from the users were successfully deleted, but couldn't sent emails! Detail: ${error}`})
+    }
 }
 
 export const sendRestoreLink = async (req, res) => {

@@ -62,7 +62,7 @@ export default class UserSerivce {
         try {
             users.forEach(async (u) => {
                 let removedUser = await userModel.findOneAndRemove({email: u.email})
-                await userModel.insertMany(removedUser) // Uso para testing, quitar luego
+                // await userModel.insertMany(removedUser) // Uso para testing, quitar luego
             })
             return 
         } catch (error) {

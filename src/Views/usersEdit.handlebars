@@ -1,0 +1,20 @@
+<div class="body_container">
+    <section class="top-nav">
+        <div style= "height: 100%;">
+            <img style= "height: 100%;" src="https://i.ibb.co/mTvfMr6/logo.png">
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            {{#if user}}
+                <li><a href="/users/profile">Profile</a></li>
+                <li><button type="submit" onclick="logout('{{user.email}}')">Logout</button></li>
+            {{else}}
+                <li><a href="/users/login">Login</a></li>
+                <li><a href="/users/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </section>
+</div>

@@ -37,13 +37,20 @@
                         <li>Stock: {{this.stock}}</li>
                     </ul>
                     {{#isAdmin ../user.role}}
-                    <h3><a>Editar productos</a></h3>
+                    <button
+                        onclick="deleteProductPermanently('{{this.id}}', '{{this.owner}}')">
+                        Delete product
+                    </button>
                     {{else}}
-                    <button class="btn" type='submit' 
+                    <button
+                        class="btn"
+                        type='submit' 
                         {{#isOwner ../user.email this.owner}}
-                            style="display: none;"
+                        style="display: none;"
                         {{/isOwner}}
-                        onclick="addProductToCart('{{../user.cart_id}}', '{{this._id}}', '{{this.title}}')"> + CART </button>
+                        onclick="addProductToCart('{{../user.cart_id}}', '{{this._id}}', '{{this.title}}')"
+                    > + CART
+                    </button>
                     {{/isAdmin}}
                 </div>
             {{/each}}
@@ -104,3 +111,4 @@
 <script src="/js/carts.js"></script>
 <script src="/js/messages.js"></script>
 <script src="/js/users.js"></script>
+<script src="/js/deleteProduct.js"></script>

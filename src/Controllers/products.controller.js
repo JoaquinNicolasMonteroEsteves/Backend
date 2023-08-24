@@ -5,20 +5,15 @@ import EErrors from "../Services/Errors/error-enum.js"
 
 let PS = new ProductService()
 
-// export const addProduct = async (req, res) => {
-//     try
-//     {
-//         let result = await PS.addProduct(req.body)
-//         if(!result.status) {
-//             res.status(405).send({status: 'Error', msg: "An error occurred while trying to add a new product"})
-//         }
-//         res.status(201).send(result)
-        
-//     }
-//     catch (error){
-//         return error
-//     }
-// }
+export const deleteProduct = async (req, res) => {
+  let productId = req.params.pid
+  let deletedProduct = await PS.deleteProduct(productId)
+  if (typeof(deletedProduct) == "object") {
+    res.status(201).send(deletedProduct)
+  } else {
+    res.send({status: 'Error', message: `Product with ID: ${productId} couldn't be deleted`})
+  }
+}
 
 export const addProduct = async (req, res) => {
     try {

@@ -56,5 +56,14 @@ export default class ProductService {
         return {s, n_s}
     }
 
+    deleteProduct = async (id) => {
+        try {
+            let deletedProduct = await productModel.findOneAndDelete({_id: id}, {title:1, owner:1, _id:0})
+            await productModel.insertMany(deletedProduct)
+            return deletedProduct
+        } catch (error) {
+            return `An error has occurred by deleting a product. Error detail: ${error}`
+        }
+    }
 }
 

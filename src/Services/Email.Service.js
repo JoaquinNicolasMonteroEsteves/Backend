@@ -83,6 +83,31 @@ export default class EmailService {
           return `An error occurred while trying to sending the email. Detail: ${error}`
       }
     }
+
+    sendProductDeletedEmail = async (user, product) => {
+      try {
+          const mailOptions = {
+              from: "Coder test " + config.gmailAccount,
+              to: user,
+              subject: "Account deleted",
+              html: `<div>
+                      <h2>Your prduct ${product} has been deleted</h2>
+                    </div>`,
+              attachments: []
+          }
+          
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+             return `An error ocurred while trying to send an email. \n
+             Users: ${user} \n
+             Detail: ${error}`
+            }
+          })
+        return {user: user}
+      } catch (error) {
+          return `An error occurred while trying to sending the email. Detail: ${error}`
+      }
+    }
     
     // sendEmailWithAttachments = async (ticketID) => {
     //     try {

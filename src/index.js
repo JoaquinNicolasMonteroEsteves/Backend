@@ -19,6 +19,7 @@ import { addLogger } from './config/logger_Base.js'
 import MongoSingleton from './config/mongodb-singleton.js'
 import swaggerUIExpress from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
+import routerE from './Routes/email.router.js'
 
 const app = express()
 
@@ -104,18 +105,6 @@ const httpServer = app.listen(config.port, () => {
 	console.log("Servidor escuchando por el puerto: " + config.port);
 })
 
-// const DB = config.mongoUrl
-// const connectMongoDB = async () => {
-//     try {
-//         await mongoose.connect(DB)
-//         console.log("Connecting using MongoDB")
-//     }
-//     catch (error){
-//         process.exit()
-//     }
-// }
-// connectMongoDB()
-
 app.use(express.static(__dirname+'/public'))
 
 //Logger
@@ -154,5 +143,6 @@ app.use('/api/sessions', routerS)
 app.use('/api/products', routerP)
 app.use('/api/carts', routerC)
 app.use('/api/messages', routerM)
+app.use('/api/emails', routerE)
 app.use('/github', routerG)
 app.use('/mockingproducts', routerMocks)
