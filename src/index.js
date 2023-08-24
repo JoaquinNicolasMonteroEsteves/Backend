@@ -155,4 +155,8 @@ app.use('/api/carts', routerC)
 app.use('/api/messages', routerM)
 app.use('/api/emails', routerE)
 app.use('/github', routerG)
+<<<<<<< HEAD
 //app.use('/mockingproducts', routerMocks)
+=======
+//app.use('/mockingproducts', routerMocks)
+>>>>>>> cb9896507e1e51ac4f96f83ab67cff5511e78399
