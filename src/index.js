@@ -14,7 +14,7 @@ import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import config from './config/config.js'
 import routerM from './Routes/messages.router.js'
-import routerMocks from './Routes/mock.router.js'
+//import routerMocks from './Routes/mock.router.js'
 import { addLogger } from './config/logger_Base.js'
 import MongoSingleton from './config/mongodb-singleton.js'
 import swaggerUIExpress from 'swagger-ui-express'
@@ -101,8 +101,18 @@ hbs.handlebars.registerHelper("isOwner", function (userEmail, pOwner, options) {
 })
 
 
-const httpServer = app.listen(config.port, () => {
-	console.log("Servidor escuchando por el puerto: " + config.port);
+const puerto = process.env.PORT || 8080;
+
+const httpServer = app.listen(puerto, () => {
+	console.log("Servidor escuchando por el puerto: " + puerto);
+
+    setTimeout(() => {
+        console.log('Cerrando el servidor automáticamente...');
+        httpServer.close(() => {
+          console.log('Servidor cerrado.');
+          process.exit(0); // Cerrar la aplicación
+        });
+      }, 5000);
 })
 
 app.use(express.static(__dirname+'/public'))
@@ -145,4 +155,4 @@ app.use('/api/carts', routerC)
 app.use('/api/messages', routerM)
 app.use('/api/emails', routerE)
 app.use('/github', routerG)
-app.use('/mockingproducts', routerMocks)
+//app.use('/mockingproducts', routerMocks)
