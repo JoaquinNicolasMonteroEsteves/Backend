@@ -32,7 +32,7 @@ export default class UserSerivce {
     //Bring all users
     getUsers = async () => {
         try {
-            let users = await userModel.find({}, {"_id":0, "first_name":1, "email":1, "role":1 })
+            let users = await userModel.find({}, {"_id":0, "first_name":1, "last_name":1, "email":1, "role":1, "last_connection":1 }).lean()
             return users
         } catch (error) {
             retrun `An error has occurred while getting all users. Error detail: ${error}`  
@@ -87,6 +87,34 @@ export default class UserSerivce {
           return `An error has ocurred while consulting user database. Error detail: ${error}`
         }
     }
+
+    updateRole = async (email, role) => {
+        try {
+          let user = await userModel.findOne({ email: email })
+          if (user) {
+            if (role === 'user' || role === 'premium') {
+              await userModel.findOneAndUpdate({ email: email }, { role: role })
+              let updatedUser = await userModel.findOne({ email: email })
+              return updatedUser
+            } else {
+              return 'The role you selected does not exist, Please choose USER or PREMIUM'
+            }
+          } else {
+            return 'The user your selected does not exist'
+          }
+        } catch (error) {
+          return `An error has ocurred by consulting user database. Error detail: ${error}`
+        }
+    }
+
+    deleteUser = async (email) => {
+        try {
+          let deletedUser = await userModel.findOneAndDelete({ email: email })
+          return deletedUser
+        } catch (error) {
+          `An error has occurred by consulting user database. Error detail: ${error}`
+        }
+      }
 
     restorePass = async (email, pass) => {
         try {

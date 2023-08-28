@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { authorization, passportCall, uploader } from '../utils.js';
-import { getAndDeleteIdleUsers, getUsers, restorePass, upgradeUser, uploadDocs } from '../Controllers/users.controller.js';
+import { deleteUser, getAndDeleteIdleUsers, getUsers, restorePass, updateRole, upgradeUser, uploadDocs } from '../Controllers/users.controller.js';
 import { sendDeletedEmail, sendRestoreLink } from '../Controllers/email.controller.js';
 import UserSerivce from '../Services/Users.Service.js';
 const routerU = Router();
@@ -15,6 +15,9 @@ routerU.get('/profile', passportCall('login'), authorization(['admin','premium',
 
 routerU.delete('/', getAndDeleteIdleUsers, sendDeletedEmail)
 
+routerU.delete('/:umail', passportCall('login'), authorization(['admin']), deleteUser)
+// routerU.delete('/:umail', () => {console.log("Holaaaaaaaaaaa");})
+
 routerU.get('/login', (req, res)=>{
     res.render("login");
 })
@@ -27,8 +30,6 @@ routerU.get('/error', (req, res) => {
     res.render("error")
 })
 
-routerU.get('/', getUsers)
-
 routerU.post('/premium/:umail', upgradeUser)
 
 routerU.post('/restore/:umail', sendRestoreLink)
@@ -36,5 +37,7 @@ routerU.post('/restore/:umail', sendRestoreLink)
 routerU.post('/:umail/documents', uploader.any(), uploadDocs) 
 
 routerU.put('/restore/new', restorePass)
+
+routerU.put('/update', passportCall('login'), authorization(['admin']), updateRole)
 
 export default routerU;

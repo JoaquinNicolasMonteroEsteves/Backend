@@ -129,3 +129,18 @@ export const authorization = (roles) => {
       next()
     }
 }
+
+export const timeNow = () => {
+  let currentLocalDate = new Date()
+  currentLocalDate.setHours(currentLocalDate.getHours() - 3)
+  let dateNow = currentLocalDate.toISOString()
+  return dateNow
+}
+
+export const periodTime = (lastTime, nowTime) => {
+  let msPerHour = 1000 * 60 * 60
+  let last = Date.parse(lastTime)
+  let now = Date.parse(nowTime)
+  let result = ((now - last) / msPerHour).toFixed(1)
+  return result
+}

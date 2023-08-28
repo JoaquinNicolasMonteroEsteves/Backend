@@ -13,6 +13,9 @@
                 {{#isNotPremium user.role}}
                     <li><a href="/premium">Hacerse Premium</a></li>
                 {{/isNotPremium}}
+                {{#isAdmin user.role}}
+                <li><a href="/users">Editar usuarios</a></li>
+                {{/isAdmin}}
             {{else}}
                 <li><a href="/users/login">Login</a></li>
                 <li><a href="/users/register">Register</a></li>

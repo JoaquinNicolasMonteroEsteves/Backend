@@ -4,7 +4,7 @@ import routerC from './Routes/carts.router.js'
 import routerS from './Routes/sessions.router.js'
 import routerU from './Routes/users.router.js'
 import routerG from './Routes/github-login.views.router.js'
-import { __dirname } from './utils.js'
+import { __dirname, periodTime, timeNow } from './utils.js'
 import handlebars from 'express-handlebars'
 import viewRouter from './Routes/views.router.js'
 import { Server } from 'socket.io'
@@ -58,6 +58,23 @@ app.set('view engine', 'handlebars')
 
 let hbs = handlebars.create({})
 
+hbs.handlebars.registerHelper("isClient", function (role, options) {
+    if (role === 'premium' || role === 'user') {
+      return options.fn(this)
+    } else {
+      return options.inverse(this)
+    }
+  })
+
+  hbs.handlebars.registerHelper("isIdle", function (last_connection, options) {
+    let period = periodTime(last_connection, timeNow())
+    if (period >= 48) {
+      return options.fn(this)
+    } else {
+      return options.inverse(this)
+    }
+  })
+
 hbs.handlebars.registerHelper("isAdmin", function (role, options) {
     if (role === "admin") {
         return options.fn(this)  
@@ -106,13 +123,13 @@ const puerto = process.env.PORT || 8080;
 const httpServer = app.listen(puerto, () => {
 	console.log("Servidor escuchando por el puerto: " + puerto);
 
-    setTimeout(() => {
-        console.log('Cerrando el servidor automáticamente...');
-        httpServer.close(() => {
-          console.log('Servidor cerrado.');
-          process.exit(0); // Cerrar la aplicación
-        });
-      }, 5000);
+    // setTimeout(() => {
+    //     console.log('Cerrando el servidor automáticamente...');
+    //     httpServer.close(() => {
+    //       console.log('Servidor cerrado.');
+    //       process.exit(0); // Cerrar la aplicación
+    //     });
+    //   }, 5000);
 })
 
 app.use(express.static(__dirname+'/public'))

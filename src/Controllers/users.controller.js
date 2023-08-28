@@ -44,6 +44,19 @@ export const upgradeUser = async (req, res) => {
   }
 }
 
+export const updateRole = async (req, res) => {
+  try {
+    let result = await US.updateRole(req.body.email, req.body.role)
+    if (typeof(result) == 'object') {
+      res.status(201).json({ status: 'Success', message: `User role was successfully updated! Now ${result.email} is ${result.role}`})
+    } else {
+      res.status(400).json({ status: 'Error', message: result })
+    }
+  } catch (error) {
+    res.status(500).json({ status: 'Error', message: 'Documents could not be uploaded', detail: error})
+  }
+}
+
 export const uploadDocs = async (req, res) => {
   try {
     let files = []
@@ -107,5 +120,24 @@ export const restorePass = async (req, res) => {
   }
   catch (error) {
     res.status(500).json({ status: 'Error', message: `Password couldn't be changed! Detail: %${error}`})
+  }
+}
+
+export const deleteUser = async (req, res) => {
+  try {
+    let result = await US.deleteUser(req.params.umail)
+    res.status(201).json({ status: 'Success', message: `User with email: ${result.email} was successfully deleted`})
+  } catch (error) {
+    res.status(500).json({ status: 'Error', message: 'User could not be deleted from de BD', detail: error})
+  }
+}
+
+export const renderUsers = async (req, res) => {
+  try {
+    let users = await US.getUsers()
+    let data = { users: users, admin: req.user }
+    res.render('usersEdit', data)
+  } catch (error) {
+    res.render('error', error)
   }
 }

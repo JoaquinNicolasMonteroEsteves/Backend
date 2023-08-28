@@ -13,3 +13,42 @@ const restore = (email) => {
         }
     })
 }
+
+const deleteUser = (email) => {
+    let a = confirm("Está seguro que desea eliminar este usuario?")
+    if (a) {
+        fetch(`/users/${email}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-type': 'application/json'
+          }
+        }).then((response) => {
+          if(response.ok) {
+            response.json().then((result) => {
+              alert(result.message)
+              window.location.reload()
+            })
+          } else {
+            console.error('Error trying to delete user!')
+          }
+        })
+    }
+  }
+
+  const deleteIdleUsers = () => {
+    fetch('/users/', {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    }).then((response) => {
+      if(response.ok) {
+        response.json().then((result) => {
+          alert(result.message)
+          window.location.reload()
+        })
+      } else {
+        console.error('Error trying to delete idle users!')
+      }
+    })
+  }

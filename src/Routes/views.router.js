@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { authorization, hourTime, passportCall, readLinkFilter } from '../utils.js'
 import { environment } from '../config/config.js'
 import userModel from '../Services/models/user.model.js'
+import { renderUsers } from '../Controllers/users.controller.js'
 
 const viewRouter = Router()
 let PS = new ProductService()
@@ -104,5 +105,7 @@ viewRouter.get('/restore/password', passportCall('login'), authorization(['admin
 viewRouter.get('/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })
+
+viewRouter.get('/users', passportCall('login'), authorization(['admin']), renderUsers)
 
 export default viewRouter

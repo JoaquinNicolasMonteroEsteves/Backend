@@ -8,13 +8,61 @@
             <div class='menu-button'></div>
         </label>
         <ul class="menu">
-            {{#if user}}
+            {{#if admin}}
                 <li><a href="/users/profile">Profile</a></li>
-                <li><button type="submit" onclick="logout('{{user.email}}')">Logout</button></li>
+                <li><button type="submit" onclick="logout('{{admin.email}}')">Logout</button></li>
             {{else}}
                 <li><a href="/users/login">Login</a></li>
                 <li><a href="/users/register">Register</a></li>
             {{/if}}
         </ul>
     </section>
+    <h3>Administrator:</h3>
+    <ul>
+        <p>
+            - The 'Delete idle users' button will delete users if its last connection has been more than 48h before.</br>
+            - Regardless, you will find in the list users below that those idle users has its mail in red.</br>
+            - In the next form you can change user rol by introducing email and role you want to asign:
+        </p>
+    </ul>
+    <form id="roleForm" class="user-form">
+        <h4>Change Users Role</h4>
+        </br>
+        <label>User email:</label>
+        <input type="text" name="email" required="true" placeholder="Enter user email">
+        <br/>
+        <label>New user role:</label>
+        <input type="text" name="role" required="true" placeholder="user or premium">
+        <div class="send">
+          <input type="submit">
+        </div>
+      </form>
+      </br>
+    <section class='users-container'>
+      {{#each users}}
+        <div>
+          <div class='user-card-header'>
+            <h3
+                {{#isIdle this.last_connection}} 
+                style="color: rgb(255, 0, 0);"
+                {{/isIdle}}
+            >{{this.email}}</h3>
+            <button onclick="deleteUser('{{this.email}}')">
+              Eliminar usuario
+            </button>
+          </div>
+          <ul>
+            <li>{{this.first_name}} {{this.last_name}}</li>
+            <li>Rol: {{this.role}}</li>
+            <li>Última conexión: {{this.last_connection}}</li>
+          </ul>
+        </div>
+    {{/each}}
+    </section>
+    </br></br>
+        <button class="send" onclick="deleteIdleUsers()">Delete idle users</button>
 </div>
+
+<script src="/js/users.js"></script>
+<script src="/js/logout.js"></script>
+<script src="/js/updateRole.js"></script>
